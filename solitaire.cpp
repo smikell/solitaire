@@ -8,11 +8,8 @@
 
 int main() {
     
-    std::cout << " ---- \n"
-              << "|    |\n"
-              << "| 7H |\n"
-              << "|    |\n"
-              << " ---- \n";
+    Game test;
+    test.shuffle();
     
     //for each column, check size of column, print top halves of cards, only show bottom one? or condense
     
