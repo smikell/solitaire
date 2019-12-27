@@ -21,45 +21,29 @@ enum class Value {Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jac
 struct Card {
     Suit suit;
     Value value;
+    bool up = false;
 };
 
+//overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s);
+//overload for Value enum to print to screen
 std::ostream& operator<<(std::ostream& out, Value& v);
-
+//overload for Card to print to screen
+std::ostream& operator<<(std::ostream& out, Card& c);
 
 class Game {
 public:
+    //ctor for Game, resizes members appropriately
     Game() {
         deck.resize(52);
         tableau.resize(7, std::vector<Card>(20));
         foundations.resize(4, std::vector<Card>(13));
     }
     
-    void shuffle() {
-        //create iterable containers for suits and values
-        std::vector<Suit> suits {Suit::Spade, Suit::Diamond, Suit::Club, Suit::Heart};
-        std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
-            Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
-            Value::Jack, Value::Queen, Value::King};
-        
-        //load deck
-        size_t pos = 0;
-        for (Suit s : suits) {
-            for (Value v : values) {
-                deck[pos++] = Card{s, v};
-            }
-        }
-        
-        //generate seed from system clock time
-        long long seed = std::chrono::system_clock::now().time_since_epoch().count();
-        //use seed with mersenne twister to shuffle deck randomly
-        std::shuffle(deck.begin(), deck.end(), std::mt19937(static_cast<unsigned>(seed)));
-        
-        //TEST SHUFFLE
-        for (Card c : deck) {
-            std::cout << c.suit << c.value << "\n";
-        }
-    }
+    //shuffle deck prior to starting game
+    void shuffle();
+    //deal deck into tableau
+    void deal();
     
 private:
     std::vector<Card> deck;

@@ -8,6 +8,7 @@
 
 #include "game.h"
 
+//overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s) {
     if (s == Suit::Spade) {
         out << 'S';
@@ -24,6 +25,7 @@ std::ostream& operator<<(std::ostream& out, Suit& s) {
     return out;
 }
 
+//overload for Value enum to print to screen
 std::ostream& operator<<(std::ostream& out, Value& v) {
     if (v == Value::Ace) {
         out << 'A';
@@ -65,4 +67,48 @@ std::ostream& operator<<(std::ostream& out, Value& v) {
         out << 'K';
     }
     return out;
+}
+
+//overload for Card to print to screen
+std::ostream& operator<<(std::ostream& out, Card& c) {
+    out << c.suit << c.value;
+    return out;
+}
+
+//shuffle deck prior to starting game
+void Game::shuffle() {
+    //create iterable containers for suits and values
+    std::vector<Suit> suits {Suit::Spade, Suit::Diamond, Suit::Club, Suit::Heart};
+    std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
+        Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
+        Value::Jack, Value::Queen, Value::King};
+    
+    //load deck
+    size_t pos = 0;
+    for (Suit s : suits) {
+        for (Value v : values) {
+            deck[pos++] = Card{s, v};
+        }
+    }
+    
+    //generate seed from system clock time
+    long long seed = std::chrono::system_clock::now().time_since_epoch().count();
+    //use seed with mersenne twister to shuffle deck randomly
+    std::shuffle(deck.begin(), deck.end(), std::mt19937(static_cast<unsigned>(seed)));
+}
+
+//deal deck into tableau
+void Game::deal() {
+    
+    //TEST TABLAEU LAYOUT
+    
+    //for each column
+    for (size_t c = 0; c < 7; ++c) {
+        //add proper number of cards
+        for (size_t r = 0; r < c; ++r) {
+            
+        }
+        //last card gets turned then added
+        
+    }
 }
