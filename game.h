@@ -18,10 +18,16 @@
 enum class Suit {Spade, Diamond, Club, Heart};
 enum class Value {Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
 
-struct Card {
+class Card {
+public:
+    Card() : suit{Suit::Spade}, value{Value::Ace}, count{1} {}
+    Card(Suit s, Value v) : suit{s}, value{v}, count{1} {}
     Suit suit;
     Value value;
+    size_t count;
     bool up = false;
+    //update count for sub columns during move
+    void update_count(size_t row, size_t col);
 };
 
 //overload for Suit enum to print to screen
@@ -36,7 +42,7 @@ public:
     //ctor for Game, resizes members appropriately
     Game() {
         deck.resize(52);
-        tableau.resize(7, std::vector<Card>(20));
+        tableau.resize(20, std::vector<Card>(7));
         foundations.resize(4, std::vector<Card>(13));
     }
     

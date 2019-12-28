@@ -8,6 +8,9 @@
 
 #include "game.h"
 
+//update count for sub columns during move
+
+
 //overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s) {
     if (s == Suit::Spade) {
@@ -71,7 +74,8 @@ std::ostream& operator<<(std::ostream& out, Value& v) {
 
 //overload for Card to print to screen
 std::ostream& operator<<(std::ostream& out, Card& c) {
-    out << c.suit << c.value;
+    if (!c.up) out << "**";
+    else out << c.suit << c.value;
     return out;
 }
 
@@ -82,15 +86,13 @@ void Game::shuffle() {
     std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
         Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
         Value::Jack, Value::Queen, Value::King};
-    
     //load deck
     size_t pos = 0;
     for (Suit s : suits) {
         for (Value v : values) {
-            deck[pos++] = Card{s, v};
+            deck[pos++] = Card(s, v);
         }
     }
-    
     //generate seed from system clock time
     long long seed = std::chrono::system_clock::now().time_since_epoch().count();
     //use seed with mersenne twister to shuffle deck randomly
@@ -99,16 +101,41 @@ void Game::shuffle() {
 
 //deal deck into tableau
 void Game::deal() {
-    
-    //TEST TABLAEU LAYOUT
-    
+    //deck index
+    size_t pos = 0;
     //for each column
     for (size_t c = 0; c < 7; ++c) {
         //add proper number of cards
         for (size_t r = 0; r < c; ++r) {
+            //add card
+            tableau[r][c] = deck[pos++];
+            //set proper subcolumn count
+            tableau[r][c].count = c - r + 1;
             
         }
-        //last card gets turned then added
+        //last card gets added then turned
+        tableau[c][c] = deck[pos++];
+        tableau[c][c].up = true;
+        //subcolumn count always 1 for last card
+        tableau[c][c].count = 1;
         
     }
+    //TEST TABLAEU LAYOUT
+    for (std::vector<Card> col : tableau) {
+        for (Card c : col) {
+            std::cout << c << " ";
+        }
+        std::cout << "\n";
+    }
+    /*
+    for (size_t c = 0; c < 7; ++c) {
+        for (size_t r = 0; r < tableau[c][r].count; ++r) {
+            std::cout << tableau[c][r] << " ";
+        }
+        std::cout << "\n";
+    }
+    */
 }
+
+//when move cards, decrease each card's sub column by the sub col moved in the old
+//increase each card's sub column by the sub col moved in the new

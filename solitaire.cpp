@@ -10,6 +10,7 @@ int main() {
     
     Game test;
     test.shuffle();
+    test.deal();
     
     //for each column, check size of column, print top halves of cards, only show bottom one? or condense
     
