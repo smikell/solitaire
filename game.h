@@ -17,7 +17,7 @@
 #include <random>
 #include <chrono>
 
-enum class Suit {None, Spade, Diamond, Club, Heart};
+enum class Suit {None, Spade, Heart, Club, Diamond};
 enum class Value {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
 
 struct Card {
@@ -59,7 +59,7 @@ private:
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
     std::vector<std::stack<Card>> foundations;
-    //print hidden hand alongside flipped card when player draws
+    //print hidden hand alongside flipped card when draw from hand
     bool drawn = false;
 };
 

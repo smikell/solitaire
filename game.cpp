@@ -13,14 +13,14 @@ std::ostream& operator<<(std::ostream& out, Suit& s) {
     if (s == Suit::Spade) {
         out << 'S';
     }
-    else if (s == Suit::Diamond) {
-        out << 'D';
+    else if (s == Suit::Heart) {
+        out << 'H';
     }
     else if (s == Suit::Club) {
         out << 'C';
     }
-    else if (s == Suit::Heart) {
-        out << 'H';
+    else if (s == Suit::Diamond) {
+        out << 'D';
     }
     else {
         out << ' ';
@@ -85,7 +85,7 @@ std::ostream& operator<<(std::ostream& out, Card& c) {
 //shuffle deck prior to starting game
 void Game::shuffle() {
     //create iterable containers for suits and values
-    std::vector<Suit> suits {Suit::Spade, Suit::Diamond, Suit::Club, Suit::Heart};
+    std::vector<Suit> suits {Suit::Spade, Suit::Heart, Suit::Club, Suit::Diamond};
     std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
         Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
         Value::Jack, Value::Queen, Value::King};
@@ -143,7 +143,9 @@ void Game::print_game() {
         std::cout << pile.top() << " ";
     }
     std::cout << "\n\n";
+    std::cout << "1  2  3  4  5  6  7  \n";
     //print tableau
+    unsigned row_num = 0;
     for (std::vector<Card> row : tableau) {
         //stops printing blank cards after whole row of blanks printed
         unsigned blanks = 0;
@@ -156,11 +158,13 @@ void Game::print_game() {
                 ++blanks;
             }
         }
-        std::cout << "\n";
         //at most 7 cards in row
         if (blanks == 7) {
+            std::cout << "\n";
             break;
         }
+        std::cout << " " << ++row_num;
+        std::cout << "\n";
     }
 }
 
