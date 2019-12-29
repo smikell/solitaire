@@ -11,17 +11,20 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
+#include <stack>
 #include <algorithm>
 #include <random>
 #include <chrono>
 
-enum class Suit {Spade, Diamond, Club, Heart};
-enum class Value {Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
+enum class Suit {None, Spade, Diamond, Club, Heart};
+enum class Value {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
 
 class Card {
 public:
     Card() : suit{Suit::Spade}, value{Value::Ace} {}
     Card(Suit s, Value v) : suit{s}, value{v} {}
+    Card(Suit s, Value v, bool placeholder) : Card(s, v) { up = placeholder; }
     Suit suit;
     Value value;
     //card faced up
@@ -43,7 +46,7 @@ public:
     Game() {
         deck.resize(52);
         tableau.resize(20, std::vector<Card>(7));
-        foundations.resize(4, std::vector<Card>(13));
+        foundations.resize(4);
     }
     
     //shuffle deck prior to starting game
@@ -54,9 +57,11 @@ public:
     void print_game();
     
 private:
-    std::vector<Card> deck;
+    std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
-    std::vector<std::vector<Card>> foundations;
+    std::vector<std::stack<Card>> foundations;
+    //print hidden hand alongside flipped card when player draws
+    bool drawn = false;
 };
 
 #endif /* game_h */

@@ -22,6 +22,9 @@ std::ostream& operator<<(std::ostream& out, Suit& s) {
     else if (s == Suit::Heart) {
         out << 'H';
     }
+    else {
+        out << ' ';
+    }
     return out;
 }
 
@@ -66,6 +69,9 @@ std::ostream& operator<<(std::ostream& out, Value& v) {
     else if (v == Value::King) {
         out << 'K';
     }
+    else {
+        out << ' ';
+    }
     return out;
 }
 
@@ -83,6 +89,11 @@ void Game::shuffle() {
     std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
         Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
         Value::Jack, Value::Queen, Value::King};
+    //load foundation placeholders
+    size_t suit = 0;
+    for (std::stack<Card>& pile : foundations) {
+        pile.push(Card(suits[suit++], Value::None, true));
+    }
     //load deck
     size_t pos = 0;
     for (Suit s : suits) {
@@ -108,22 +119,30 @@ void Game::deal() {
             tableau[r][c] = deck[pos++];
             //mark card as in tableau
             tableau[r][c].in = true;
-            //set proper subcolumn count
-            //tableau[r][c].count = c - r + 1;
         }
         //last card gets added then turned
         tableau[c][c] = deck[pos++];
         tableau[c][c].up = true;
         //mark card as in tableau
         tableau[c][c].in = true;
-        //subcolumn count always 1 for last card
-        //tableau[c][c].count = 1;
     }
+    print_game();
 }
 
 //print hand, foundations, and tableau to screen
 void Game::print_game() {
-    
+    //print hand
+    if(drawn) {
+        std::cout << deck[1] << " " << deck.front() << "    ";
+    }
+    else {
+        std::cout << deck.front() << "       ";
+    }
+    //print foundations
+    for (std::stack<Card> pile : foundations) {
+        std::cout << pile.top() << " ";
+    }
+    std::cout << "\n\n";
     //print tableau
     for (std::vector<Card> row : tableau) {
         //stops printing blank cards after whole row of blanks printed
