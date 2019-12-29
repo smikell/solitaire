@@ -8,9 +8,6 @@
 
 #include "game.h"
 
-//update count for sub columns during move
-
-
 //overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s) {
     if (s == Suit::Spade) {
@@ -109,32 +106,43 @@ void Game::deal() {
         for (size_t r = 0; r < c; ++r) {
             //add card
             tableau[r][c] = deck[pos++];
+            //mark card as in tableau
+            tableau[r][c].in = true;
             //set proper subcolumn count
-            tableau[r][c].count = c - r + 1;
-            
+            //tableau[r][c].count = c - r + 1;
         }
         //last card gets added then turned
         tableau[c][c] = deck[pos++];
         tableau[c][c].up = true;
+        //mark card as in tableau
+        tableau[c][c].in = true;
         //subcolumn count always 1 for last card
-        tableau[c][c].count = 1;
-        
+        //tableau[c][c].count = 1;
     }
-    //TEST TABLAEU LAYOUT
-    for (std::vector<Card> col : tableau) {
-        for (Card c : col) {
-            std::cout << c << " ";
+}
+
+//print hand, foundations, and tableau to screen
+void Game::print_game() {
+    
+    //print tableau
+    for (std::vector<Card> row : tableau) {
+        //stops printing blank cards after whole row of blanks printed
+        unsigned blanks = 0;
+        for (Card c : row) {
+            if (c.in) {
+                std::cout << c << " ";
+            }
+            else {
+                std::cout << "   ";
+                ++blanks;
+            }
         }
         std::cout << "\n";
-    }
-    /*
-    for (size_t c = 0; c < 7; ++c) {
-        for (size_t r = 0; r < tableau[c][r].count; ++r) {
-            std::cout << tableau[c][r] << " ";
+        //at most 7 cards in row
+        if (blanks == 7) {
+            break;
         }
-        std::cout << "\n";
     }
-    */
 }
 
 //when move cards, decrease each card's sub column by the sub col moved in the old

@@ -20,14 +20,14 @@ enum class Value {Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jac
 
 class Card {
 public:
-    Card() : suit{Suit::Spade}, value{Value::Ace}, count{1} {}
-    Card(Suit s, Value v) : suit{s}, value{v}, count{1} {}
+    Card() : suit{Suit::Spade}, value{Value::Ace} {}
+    Card(Suit s, Value v) : suit{s}, value{v} {}
     Suit suit;
     Value value;
-    size_t count;
+    //card faced up
     bool up = false;
-    //update count for sub columns during move
-    void update_count(size_t row, size_t col);
+    //card in tableau
+    bool in = false;
 };
 
 //overload for Suit enum to print to screen
@@ -50,6 +50,8 @@ public:
     void shuffle();
     //deal deck into tableau
     void deal();
+    //print hand, foundations, and tableau to screen
+    void print_game();
     
 private:
     std::vector<Card> deck;
