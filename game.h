@@ -54,11 +54,25 @@ public:
     void deal();
     //print hand, foundations, and tableau to screen
     void print_game();
+    //draw card from hand
+    virtual void draw() = 0;
+    //move card from hand to foundation
+    virtual void move_hand_to_foundation() = 0;
+    //move card from hand to tableau
+    virtual void move_hand_to_tableau() = 0;
+    //move card from tableau to foundation
+    virtual void move_tableau_to_foundation() = 0;
+    //move card from foundation to tableau
+    virtual void move_foundation_to_tableau() = 0;
+    //move card within tableau columns
+    virtual void move_in_tableau() = 0;
     
 private:
+    friend class User;
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
     std::vector<std::stack<Card>> foundations;
+    unsigned num_moves = 0;
     //print hidden hand alongside flipped card when draw from hand
     bool drawn = false;
 };

@@ -2,15 +2,16 @@
 //
 // by Sam Mikell
 //
-// 19 December 2019
+// 19 December 2019 - Present
 
-#include "game.h"
+#include "user.h"
 
 int main() {
     
-    Game test;
+    User test;
     test.shuffle();
     test.deal();
+    test.draw();
     
     //for each column, check size of column, print top halves of cards, only show bottom one? or condense
     

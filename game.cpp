@@ -116,15 +116,24 @@ void Game::deal() {
         //add proper number of cards
         for (size_t r = 0; r < c; ++r) {
             //add card
-            tableau[r][c] = deck[pos++];
+            tableau[r][c] = deck[pos];
+            //remove from deck
+            deck.erase(deck.begin() + pos);
             //mark card as in tableau
             tableau[r][c].in = true;
+            //next position
+            ++pos;
         }
-        //last card gets added then turned
-        tableau[c][c] = deck[pos++];
+        //last card added
+        tableau[c][c] = deck[pos];
+        //remove from deck
+        deck.erase(deck.begin() + pos);
+        //turn last card
         tableau[c][c].up = true;
         //mark card as in tableau
         tableau[c][c].in = true;
+        //next position
+        ++pos;
     }
     print_game();
 }
@@ -167,6 +176,3 @@ void Game::print_game() {
         std::cout << "\n";
     }
 }
-
-//when move cards, decrease each card's sub column by the sub col moved in the old
-//increase each card's sub column by the sub col moved in the new
