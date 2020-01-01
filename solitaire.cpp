@@ -4,16 +4,25 @@
 //
 // 19 December 2019 - Present
 
-#include "user.h"
+//#include "user.h"
+#include "card.h"
 
 int main() {
     
+    
+    Card ace(Suit::Spade, Rank::Ace);
+    Card two(Suit::Spade, Rank::Two, true);
+    
+    
+    
+    //std::cout << Rank::Two - Rank::Ace;
+    
+    /*
     User test;
     test.shuffle();
     test.deal();
     test.draw();
-    
-    //for each column, check size of column, print top halves of cards, only show bottom one? or condense
+    */
     
     /*
      C++ Solitaire: backend in C++ then figure out how to get that on the web so can play online. Have leaderboards for fastest overall time and personal best times. Also derive a point system and display high scores and personal high scores, gain certain number of points depending on Time Passed and Card Placed. Use SQL for the database behind the scenes rather than something like Firebase. Use Flask framework to get C++ backend through Python onto web app. Use HTML, CSS, or JS for Front end. React Front End! Follow style guidelines and tutorials from EECS 381 Website. Also when get to pushing it to Web, follow 485 Tutorials for HTML, CSS, JS, SQL, and More.

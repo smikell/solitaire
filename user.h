@@ -18,7 +18,7 @@ public:
     //draw card from hand
     void draw() override;
     //move card from hand to foundation
-    void move_hand_to_foundation() override;
+    void move_hand_to_foundation(char suit) override;
     //move card from hand to tableau
     void move_hand_to_tableau() override;
     //move card from tableau to foundation

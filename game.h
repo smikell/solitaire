@@ -32,6 +32,12 @@ struct Card {
     bool in = false;
 };
 
+//turn card function
+//get suit and get rank
+//check if matching suit
+//check if opposite suit
+//check if less
+
 //overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s);
 //overload for Value enum to print to screen
@@ -57,7 +63,7 @@ public:
     //draw card from hand
     virtual void draw() = 0;
     //move card from hand to foundation
-    virtual void move_hand_to_foundation() = 0;
+    virtual void move_hand_to_foundation(char suit) = 0;
     //move card from hand to tableau
     virtual void move_hand_to_tableau() = 0;
     //move card from tableau to foundation
