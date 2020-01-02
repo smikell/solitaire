@@ -30,7 +30,7 @@ public:
     //deal deck into tableau
     void deal();
     //print hand, foundations, and tableau to screen
-    void print_game();
+    void print_game() const;
     //draw card from hand
     virtual void draw() = 0;
     //move card to foundation

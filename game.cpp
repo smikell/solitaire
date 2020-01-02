@@ -64,7 +64,7 @@ void Game::deal() {
 }
 
 //print hand, foundations, and tableau to screen
-void Game::print_game() {
+void Game::print_game() const {
     //print hand
     if (deck.empty()) {
         std::cout << "          ";
@@ -76,7 +76,7 @@ void Game::print_game() {
         std::cout << deck.front() << "       ";
     }
     //print foundations
-    for (std::stack<Card>& pile : foundations) {
+    for (const std::stack<Card>& pile : foundations) {
         std::cout << pile.top() << " ";
     }
     std::cout << "\n\n";
@@ -86,7 +86,7 @@ void Game::print_game() {
     for (std::vector<Card> row : tableau) {
         //stops printing blank cards after whole row of blanks printed
         unsigned blanks = 0;
-        for (Card c : row) {
+        for (const Card& c : row) {
             if (c.is_in_tableau()) {
                 std::cout << c << " ";
             }

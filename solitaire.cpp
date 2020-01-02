@@ -5,7 +5,7 @@
 // 19 December 2019 - Present
 
 #include "xcode_redirect.hpp"
-#include <getopt.h>
+//#include <getopt.h>
 #include "user.h"
 
 //char read_command_line(int argc, char* argv[]);

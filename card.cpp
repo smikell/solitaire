@@ -20,32 +20,32 @@ Card::Card(Suit s, Rank r, bool placeholder) : Card(s, r) {
 }
 
 //return suit for output
-Suit Card::get_suit() {
+Suit Card::get_suit() const {
     return suit;
 }
 
 //return rank for output
-Rank Card::get_rank() {
+Rank Card::get_rank() const {
     return rank;
 }
 
 //check if turned for output
-bool Card::is_turned() {
+bool Card::is_turned() const {
     return up;
 }
 
 //check if in tableau for output
-bool Card::is_in_tableau() {
+bool Card::is_in_tableau() const {
     return in;
 }
 
 //check if red suit for moves
-bool Card::is_red() {
+bool Card::is_red() const {
     return get_suit() == Suit::Heart || get_suit() == Suit::Diamond;
 }
 
 //check if black suit for moves
-bool Card::is_black() {
+bool Card::is_black() const {
     return get_suit() == Suit::Spade || get_suit() == Suit::Club;
 }
 
@@ -62,7 +62,7 @@ void Card::change_tableau_status() {
 }
 
 //check if added card is matching suit
-bool Card::match_suit(Card added) {
+bool Card::match_suit(const Card added) const {
     if (added.get_suit() == get_suit()) {
         return true;
     }
@@ -70,7 +70,7 @@ bool Card::match_suit(Card added) {
 }
 
 //check if added card is opposite suit
-bool Card::opposite_suit(Card added) {
+bool Card::opposite_suit(const Card added) const {
     if ((added.is_red() && is_black()) || (added.is_black() && is_red())) {
         return true;
     }
@@ -78,7 +78,7 @@ bool Card::opposite_suit(Card added) {
 }
 
 //check if added card is subsequent rank
-bool Card::next_rank(Card added) {
+bool Card::next_rank(const Card added) const {
     //TODO: EDGE CASES: adding to a king, adding the king itself, adding ace to none
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
@@ -93,7 +93,7 @@ bool Card::next_rank(Card added) {
 }
 
 //check if added card is previous rank
-bool Card::prev_rank(Card added) {
+bool Card::prev_rank(const Card added) const {
     //TODO: EDGE CASES: adding to a king, adding an ace to a two, adding to an ace
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
@@ -108,7 +108,7 @@ bool Card::prev_rank(Card added) {
 }
 
 //overload for Suit enum to print to screen
-std::ostream& operator<<(std::ostream& out, Suit& s) {
+std::ostream& operator<<(std::ostream& out, const Suit& s) {
     if (s == Suit::Heart) {
         out << 'H';
     }
@@ -128,7 +128,7 @@ std::ostream& operator<<(std::ostream& out, Suit& s) {
 }
 
 //overload for Rank enum to print to screen
-std::ostream& operator<<(std::ostream& out, Rank& r) {
+std::ostream& operator<<(std::ostream& out, const Rank& r) {
     if (r == Rank::Ace) {
         out << 'A';
     }
@@ -175,7 +175,7 @@ std::ostream& operator<<(std::ostream& out, Rank& r) {
 }
 
 //overload for Card to print to screen
-std::ostream& operator<<(std::ostream& out, Card& c) {
+std::ostream& operator<<(std::ostream& out, const Card& c) {
     if (!c.is_turned()) out << "**";
     else {
         //TODO: dont know why need to do this
