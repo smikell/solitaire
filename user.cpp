@@ -8,9 +8,17 @@
 
 #include "user.h"
 
+//check suit input validity
+bool User::check_suit(char input) const {
+    if (SUIT_CHECK.find(input) != SUIT_CHECK.end()) {
+        return true;
+    }
+    return false;
+}
+
 //draw card from hand
 void User::draw() {
-    //if no more cards to draw, error
+    //if no more cards to draw, throw error
     if (deck.empty()) {
         //TODO: error
     }

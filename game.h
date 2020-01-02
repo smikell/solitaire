@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include <unordered_set>
 
 class Game {
 public:
@@ -31,6 +32,7 @@ public:
     void deal();
     //print hand, foundations, and tableau to screen
     void print_game() const;
+    
     //draw card from hand
     virtual void draw() = 0;
     //move card to foundation
@@ -49,8 +51,13 @@ public:
     //move card within tableau columns
     virtual void move_in_tableau() = 0;
     
+    
 private:
     friend class User;
+    const size_t MAX_COLS = 7;
+    const size_t MAX_ROWS = 20;
+    //unordered set of suit characters to check against input
+    const std::unordered_set<char> SUIT_CHECK = {'H', 'S', 'D', 'C'};
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
     std::vector<std::stack<Card>> foundations;

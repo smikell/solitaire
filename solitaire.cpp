@@ -19,6 +19,22 @@ int main(int argc, char* argv[]) {
     
     //while game not over, accept user input and respond accordingly
     
+    //moves: <char> OR <to> <from>
+        // <char> is <D>
+        // <to> can be <F> <Suit> OR <T> <Row> <Col>
+        // <from> can be <H> OR <F> <Suit> OR <T> <Row> <Col>
+    
+    Card c;
+    //while game not over
+    while (c.is_turned()) {
+        try {
+            
+            
+        }
+        catch(...) {
+            
+        }
+    }
     
     User test;
     test.shuffle();

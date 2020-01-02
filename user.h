@@ -12,9 +12,24 @@
 #include "game.h"
 #include <utility>
 
+class InputError : public std::exception {
+    
+};
+
+class MoveError : public std::exception {
+    
+};
+
+class DrawError : public MoveError {
+    
+};
+
 class User : public Game {
 public:
     User() : Game() {}
+    
+    //check suit input validity
+    bool check_suit(char input) const;
     
     //draw card from hand
     void draw() override;
@@ -44,7 +59,7 @@ public:
     void move_in_tableau() override;
     
 private:
-    
+    int score = 0;
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
 };
 

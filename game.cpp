@@ -37,7 +37,7 @@ void Game::deal() {
     //deck index
     size_t pos = 0;
     //for each column
-    for (size_t c = 0; c < 7; ++c) {
+    for (size_t c = 0; c < MAX_COLS; ++c) {
         //add proper number of cards
         for (size_t r = 0; r < c; ++r) {
             //add card
@@ -73,7 +73,7 @@ void Game::print_game() const {
         std::cout << deck[1] << " " << deck.front() << "    ";
     }
     else {
-        std::cout << deck.front() << "       ";
+        std::cout << deck.front() << "D      ";
     }
     //print foundations
     for (const std::stack<Card>& pile : foundations) {
@@ -96,7 +96,7 @@ void Game::print_game() const {
             }
         }
         //at most 7 cards in row
-        if (blanks == 7) {
+        if (blanks == MAX_COLS) {
             std::cout << "\n";
             break;
         }
