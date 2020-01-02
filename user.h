@@ -10,6 +10,7 @@
 #define user_h
 
 #include "game.h"
+#include <utility>
 
 class User : public Game {
 public:
@@ -17,6 +18,20 @@ public:
     
     //draw card from hand
     void draw() override;
+    //move card to foundation
+    //dest is destination suit
+    //move is tableau or hand
+    //optional pair of coordinates
+    void move_foundation(char dest, char move,
+                         std::pair<size_t, size_t> move_coords={0,0});
+    //move card to or within tableau
+    //move is tableau or hand
+    //optional pair of coordinates
+    void move_tableau(char dest, std::pair<size_t, size_t> dest_coords,
+                      char move, std::pair<size_t, size_t> move_coords={0,0});
+    
+    
+    
     //move card from hand to foundation
     void move_hand_to_foundation(char suit) override;
     //move card from hand to tableau

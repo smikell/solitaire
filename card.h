@@ -12,14 +12,11 @@
 #include <iostream>
 #include <vector>
 
-enum struct Suit {None, Spade, Heart, Club, Diamond};
+enum struct Suit {None, Heart, Spade, Diamond, Club};
 enum struct Rank {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
 
 class Card {
 public:
-    //iterable container of ranks in order
-    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
-        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
     //default constructor
     Card();
     //custom constructor for suit and rank
@@ -42,14 +39,14 @@ public:
     void turn();
     //change when add or remove from tableau
     void change_tableau_status();
-    //check if matching suit
-    bool match_suit(Card added, Card current);
-    //check if opposite suit
-    bool opposite_suit(Card added, Card current);
-    //check if subsequent rank
-    bool next_rank(Card added, Card current);
-    //check if previous rank
-    bool prev_rank(Card added, Card current);
+    //check if added card is matching suit
+    bool match_suit(Card added);
+    //check if added card is opposite suit
+    bool opposite_suit(Card added);
+    //check if added card is subsequent rank
+    bool next_rank(Card added);
+    //check if added card is previous rank
+    bool prev_rank(Card added);
 
 private:
     Suit suit;

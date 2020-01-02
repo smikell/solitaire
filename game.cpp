@@ -8,97 +8,22 @@
 
 #include "game.h"
 
-//overload for Suit enum to print to screen
-std::ostream& operator<<(std::ostream& out, Suit& s) {
-    if (s == Suit::Spade) {
-        out << 'S';
-    }
-    else if (s == Suit::Heart) {
-        out << 'H';
-    }
-    else if (s == Suit::Club) {
-        out << 'C';
-    }
-    else if (s == Suit::Diamond) {
-        out << 'D';
-    }
-    else {
-        out << ' ';
-    }
-    return out;
-}
-
-//overload for Value enum to print to screen
-std::ostream& operator<<(std::ostream& out, Value& v) {
-    if (v == Value::Ace) {
-        out << 'A';
-    }
-    else if (v == Value::Two) {
-        out << 2;
-    }
-    else if (v == Value::Three) {
-        out << 3;
-    }
-    else if (v == Value::Four) {
-        out << 4;
-    }
-    else if (v == Value::Five) {
-        out << 5;
-    }
-    else if (v == Value::Six) {
-        out << 6;
-    }
-    else if (v == Value::Seven) {
-        out << 7;
-    }
-    else if (v == Value::Eight) {
-        out << 8;
-    }
-    else if (v == Value::Nine) {
-        out << 9;
-    }
-    else if (v == Value::Ten) {
-        out << 10;
-    }
-    else if (v == Value::Jack) {
-        out << 'J';
-    }
-    else if (v == Value::Queen) {
-        out << 'Q';
-    }
-    else if (v == Value::King) {
-        out << 'K';
-    }
-    else {
-        out << ' ';
-    }
-    return out;
-}
-
-//overload for Card to print to screen
-std::ostream& operator<<(std::ostream& out, Card& c) {
-    if (!c.up) out << "**";
-    else out << c.suit << c.value;
-    return out;
-}
-
 //shuffle deck prior to starting game
 void Game::shuffle() {
-    //create iterable containers for suits and values
-    std::vector<Suit> suits {Suit::Spade, Suit::Heart, Suit::Club, Suit::Diamond};
-    std::vector<Value> values {Value::Ace, Value::Two, Value::Three, Value::Four,
-        Value::Five, Value::Six, Value::Seven, Value::Eight, Value::Nine, Value::Ten,
-        Value::Jack, Value::Queen, Value::King};
+    //create iterable containers for suits and ranks
+    std::vector<Suit> suits {Suit::Heart, Suit::Spade, Suit::Diamond, Suit::Club};
+    std::vector<Rank> ranks { Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
+        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
     //load foundation placeholders
     size_t suit = 0;
     for (std::stack<Card>& pile : foundations) {
-        pile.push(Card(suits[suit++], Value::None, true));
+        pile.push(Card(suits[suit++], Rank::None, true));
     }
     //load deck
     size_t pos = 0;
     for (Suit s : suits) {
-        for (Value v : values) {
-            deck[pos++] = Card(s, v);
+        for (Rank r : ranks) {
+            deck[pos++] = Card(s, r);
         }
     }
     //generate seed from system clock time
@@ -120,7 +45,7 @@ void Game::deal() {
             //remove from deck
             deck.erase(deck.begin() + pos);
             //mark card as in tableau
-            tableau[r][c].in = true;
+            tableau[r][c].change_tableau_status();
             //next position
             ++pos;
         }
@@ -129,9 +54,9 @@ void Game::deal() {
         //remove from deck
         deck.erase(deck.begin() + pos);
         //turn last card
-        tableau[c][c].up = true;
+        tableau[c][c].turn();
         //mark card as in tableau
-        tableau[c][c].in = true;
+        tableau[c][c].change_tableau_status();
         //next position
         ++pos;
     }
@@ -141,14 +66,17 @@ void Game::deal() {
 //print hand, foundations, and tableau to screen
 void Game::print_game() {
     //print hand
-    if(drawn) {
+    if (deck.empty()) {
+        std::cout << "          ";
+    }
+    else if (drawn) {
         std::cout << deck[1] << " " << deck.front() << "    ";
     }
     else {
         std::cout << deck.front() << "       ";
     }
     //print foundations
-    for (std::stack<Card> pile : foundations) {
+    for (std::stack<Card>& pile : foundations) {
         std::cout << pile.top() << " ";
     }
     std::cout << "\n\n";
@@ -159,7 +87,7 @@ void Game::print_game() {
         //stops printing blank cards after whole row of blanks printed
         unsigned blanks = 0;
         for (Card c : row) {
-            if (c.in) {
+            if (c.is_in_tableau()) {
                 std::cout << c << " ";
             }
             else {

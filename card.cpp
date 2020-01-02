@@ -41,54 +41,66 @@ bool Card::is_in_tableau() {
 
 //check if red suit for moves
 bool Card::is_red() {
-    return suit == Suit::Heart || suit == Suit::Diamond;
+    return get_suit() == Suit::Heart || get_suit() == Suit::Diamond;
 }
 
 //check if black suit for moves
 bool Card::is_black() {
-    return suit == Suit::Spade || suit == Suit::Club;
+    return get_suit() == Suit::Spade || get_suit() == Suit::Club;
 }
 
 //flip card
 void Card::turn() {
-    if (up) up = false;
+    if (is_turned()) up = false;
     else up = true;
 }
 
-//check if matching suit
-bool Card::match_suit(Card added, Card current) {
-    if (added.suit == current.suit) {
+//change when add or remove from tableau
+void Card::change_tableau_status() {
+    if (is_in_tableau()) in = false;
+    else in = true;
+}
+
+//check if added card is matching suit
+bool Card::match_suit(Card added) {
+    if (added.get_suit() == get_suit()) {
         return true;
     }
     return false;
 }
 
-//check if opposite suit
-bool Card::opposite_suit(Card added, Card current) {
-    if ((added.is_red() && current.is_black()) || (added.is_black() && current.is_red())) {
+//check if added card is opposite suit
+bool Card::opposite_suit(Card added) {
+    if ((added.is_red() && is_black()) || (added.is_black() && is_red())) {
         return true;
     }
     return false;
 }
 
-//check if subsequent rank
-bool Card::next_rank(Card added, Card current) {
+//check if added card is subsequent rank
+bool Card::next_rank(Card added) {
     //TODO: EDGE CASES: adding to a king, adding the king itself, adding ace to none
+    //create iterable container of ranks in order
+    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
+        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
     //search through vector for current, check if added's rank is next index
     for (size_t i = 0; i < ranks.size() - 1; ++i) {
-        if (current.get_rank() == ranks[i] && added.get_rank() == ranks[i + 1]) {
+        if (get_rank() == ranks[i] && added.get_rank() == ranks[i + 1]) {
             return true;
         }
     }
     return false;
 }
 
-//check if previous rank
-bool Card::prev_rank(Card added, Card current) {
+//check if added card is previous rank
+bool Card::prev_rank(Card added) {
     //TODO: EDGE CASES: adding to a king, adding an ace to a two, adding to an ace
+    //create iterable container of ranks in order
+    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
+        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
     //search through vector for current, check if added's rank is previous index
     for (size_t i = 1; i < ranks.size(); ++i) {
-        if (current.get_rank() == ranks[i] && added.get_rank() == ranks[i - 1]) {
+        if (get_rank() == ranks[i] && added.get_rank() == ranks[i - 1]) {
             return true;
         }
     }
@@ -97,17 +109,17 @@ bool Card::prev_rank(Card added, Card current) {
 
 //overload for Suit enum to print to screen
 std::ostream& operator<<(std::ostream& out, Suit& s) {
-    if (s == Suit::Spade) {
-        out << 'S';
-    }
-    else if (s == Suit::Heart) {
+    if (s == Suit::Heart) {
         out << 'H';
     }
-    else if (s == Suit::Club) {
-        out << 'C';
+    else if (s == Suit::Spade) {
+        out << 'S';
     }
     else if (s == Suit::Diamond) {
         out << 'D';
+    }
+    else if (s == Suit::Club) {
+        out << 'C';
     }
     else {
         out << ' ';
