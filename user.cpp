@@ -25,7 +25,7 @@ void User::game_starting() {
     std::cout << "**  Hand: top left area to draw remaining cards   **\n";
     std::cout << "**  Pile: top left face up cards drawn from hand  **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  Rules:                                        **\n";
+    std::cout << "**  Information:                                  **\n";
     std::cout << "**  1. Tableau cards must alternate color         **\n";
     std::cout << "**  2. Tableau cards must descend in rank         **\n";
     std::cout << "**  3. Foundation cards must match suit           **\n";
@@ -62,6 +62,11 @@ void User::game_starting() {
     std::cout << "**  Move to Foundation from Hand:                 **\n";
     std::cout << "**  F <SUIT> H ex. F S H                          **\n";
     std::cout << "**                                                **\n";
+    std::cout << "**  10. You may play to completion or enter 'q'   **\n";
+    std::cout << "**  to quit the game if you get stuck             **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  11. Enter '?' to reprint move options         **\n";
+    std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
     std::cout << "**                     Enjoy!                     **\n";
     std::cout << "****************************************************\n\n\n";
@@ -71,6 +76,45 @@ void User::game_starting() {
     getline(std::cin, name);
     
     std::cout << "Welcome " << get_name() << "! game starting...\n\n";
+}
+
+//help message for move format
+void User::help_message() {
+    std::cout << "****************************************************\n";
+    std::cout << "**                   Move Table                   **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Input Format: <TO> <FROM>                     **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Draw card to Pile from Hand (implicit):       **\n";
+    std::cout << "**  D                                             **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move to Tableau from Tableau:                 **\n";
+    std::cout << "**  T <ROW> <COL> T <ROW> <COL> ex. T 1 1 T 2 2   **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move to Tableau from Hand:                    **\n";
+    std::cout << "**  T <ROW> <COL> H ex. T 1 1 H                   **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move to Tableau from Foundation:              **\n";
+    std::cout << "**  T <ROW> <COL> F <SUIT> ex. T 1 1 F S          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Note: The <TO> Tableau <ROW> and <COL> should **\n";
+    std::cout << "**  be treated as the card you want to place the  **\n";
+    std::cout << "**  <FROM> card on top of                         **\n";
+    std::cout << "**  Example: T 1 1 T 2 2 attempts to place card   **\n";
+    std::cout << "**  at [2][2] on top of the card at [1][1]        **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move to Foundation from Tableau:              **\n";
+    std::cout << "**  F <SUIT> T <ROW> <COL> ex. F S T 1 1          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move to Foundation from Hand:                 **\n";
+    std::cout << "**  F <SUIT> H ex. F S H                          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**                 Patience is Key!               **\n";
+    std::cout << "****************************************************\n\n\n";
+    
+    print_game();
 }
 
 //check if game ended

@@ -45,6 +45,15 @@ int main(int argc, char* argv[]) {
             else if (toupper(to) == 'T') {
                 //read more
             }
+            else if (toupper(to) == '?') {
+                //reprint move options
+                game.help_message();
+                continue;
+            }
+            else if (toupper(to) == 'Q') {
+                //quit game
+                break;
+            }
             else {
                 //no matching <TO>, eat remaining line, throw invalid input error
                 std::string junk;
@@ -105,7 +114,6 @@ int main(int argc, char* argv[]) {
      - Make use of try catch and exceptions when dealing with all sorts of error handling with invalid card moves?
      - Use basic shuffling from euchre project
      - Need to update table each time move cards around. Will be best for printing’s sake. Maybe store all cards in such? Use a 2D vector? Use a terminating card to represent when stop printing, OR store size of each column at top of column for reference when printing. Need to allocate proper size: think about what’s the maximum size of a column in solitaire? 13?
-     - For shuffling look into xorshift128+ and also try doing a hash table method where create a hash function, load the cards into the hash table shuffler, then ranged-for through it to load in the table for randomization (will the result always be the same tho?)
     */
     
     return 0;

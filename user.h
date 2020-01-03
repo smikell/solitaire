@@ -69,6 +69,8 @@ public:
     User();
     //starting banner and introduction
     void game_starting();
+    //help message for move format
+    void help_message();
     //check if game ended
     bool is_game_over() const;
     //return user name
