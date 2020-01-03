@@ -35,15 +35,18 @@ public:
     void print_game() const;
     //return number of moves
     unsigned get_num_moves() const;
-    //draw card from hand
-    virtual void draw() = 0;
-    //MOVE FUNCTION THAT USES BRANCHES TO CHECK <TO> <FROM> VALIDITY
-    //move card to foundation
-    virtual void move_foundation(const char dest_suit, const char move_from,
-                                 const std::pair<size_t, size_t> move_coords={0,0}) = 0;
-    //move card to or within tableau
-    virtual void move_tableau(const std::pair<size_t, size_t> dest_coords,
-                              const char move_from, const std::pair<size_t, size_t> move_coords={0,0}) = 0;
+    //check if game ended
+    bool is_game_over() const;
+    //return completion status
+    bool is_complete() const;
+    //return user score
+    unsigned get_score() const;
+    //update user score
+    void update_score();
+    //starting banner and introduction
+    virtual void game_starting() = 0;
+    //ending banner and message
+    virtual void game_ending() const = 0;
     
 private:
     friend class User;
@@ -60,6 +63,12 @@ private:
     std::vector<std::stack<Card>> foundations;
     //print hidden hand alongside flipped card when draw from hand
     bool drawn = false;
+    //end game when user wins
+    bool game_over = false;
+    //statuses for each suit foundation completion
+    bool heart, spade, diamond, club = false;
+    //track score as game progresses
+    unsigned score = 0;
     //number of moves in game
     unsigned num_moves = 0;
 };

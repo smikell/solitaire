@@ -107,6 +107,26 @@ void Game::print_game() const {
     //TODO: ADD TIME FUNCTION
 }
 
+//check if game ended
+bool Game::is_game_over() const {
+    return game_over;
+}
+
+//return completion status
+bool Game::is_complete() const {
+    return heart && spade && diamond && club;
+}
+
+//return user score
+unsigned Game::get_score() const {
+    return score;
+}
+
+//update user score
+void Game::update_score() {
+    //TODO: score adjustment according to timing
+}
+
 //return number of moves
 unsigned Game::get_num_moves() const {
     return num_moves;

@@ -50,6 +50,9 @@ public:
     std::string error() const {
         return msg;
     }
+    MoveError(const std::string& e_msg) : MoveError() {
+        update_msg(e_msg);
+    }
     void update_msg(std::string add) {
         msg += add;
     }
@@ -73,53 +76,41 @@ public:
     //default constructor
     User();
     //starting banner and introduction
-    void game_starting();
+    void game_starting() override;
     //help message for move format
     void help_message();
-    //check if game ended
-    bool is_game_over() const;
-    //return completion status
-    bool is_complete() const;
     //return user name
     std::string get_name() const;
-    //return user score
-    unsigned get_score() const;
     //print appropriate message and spaces
     void end_print(const std::string output) const;
     void end_print(const char type) const;
     //ending banner and message
-    void game_ending() const;
+    void game_ending() const override;
     //check suit input validity
     void check_suit(const char input) const;
     //check coords input validity
     void check_coords(const size_t row, const size_t col) const;
-    //update user score
-    void update_score();
     //draw card from hand
-    void draw() override;
+    void draw();
+    //checks move for validity and calls appropriate move
+    void move(UserInput input);
     
     //move card to foundation
     //dest is destination suit
     //move is tableau or hand
     //optional pair of coordinates
     void move_foundation(const char dest_suit, const char move_from,
-                         const std::pair<size_t, size_t> move_coords={0,0}) override;
+                         const std::pair<size_t, size_t> move_coords={0,0});
     
     //move card to or within tableau
     //move is tableau or hand
     //optional pair of coordinates
     void move_tableau(const std::pair<size_t, size_t> dest_coords,
-                      const char move_from, const std::pair<size_t, size_t> move_coords={0,0}) override;
+                      const char move_from, const std::pair<size_t, size_t> move_coords={0,0});
     
 private:
-    //track user score as game progresses
-    unsigned score = 0;
     //user entered name
     std::string name;
-    //statuses for each suit foundation completion
-    bool heart, spade, diamond, club = false;
-    //end game when user wins
-    bool game_over = false;
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
 };
 

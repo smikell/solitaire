@@ -118,24 +118,9 @@ void User::help_message() {
     print_game();
 }
 
-//check if game ended
-bool User::is_game_over() const {
-    return game_over;
-}
-
-//return completion status
-bool User::is_complete() const {
-    return heart && spade && diamond && club;
-}
-
 //return user name
 std::string User::get_name() const {
     return name;
-}
-
-//return user score
-unsigned User::get_score() const {
-    return score;
 }
 
 //print appropriate message and spaces
@@ -205,11 +190,6 @@ void User::check_coords(const size_t row, const size_t col) const {
         //throw error
         throw InvalidInput("Invalid Input, invalid coordinates (ROW or COL)");
     }
-}
-
-//update user score
-void User::update_score() {
-    //TODO: score adjustment according to timing
 }
 
 //draw card from hand
