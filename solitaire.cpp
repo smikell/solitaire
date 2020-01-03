@@ -8,6 +8,8 @@
 //#include <getopt.h>
 #include "user.h"
 
+//TODO: ADD RMEs TO ALL FUNCTIONS AS DOCUMENTATION
+
 //char read_command_line(int argc, char* argv[]);
 
 //check cin status after each input read
@@ -25,6 +27,7 @@ int main(int argc, char* argv[]) {
     while (!game.is_game_over()) {
         //print prompt to accept input
         std::cout << "% ";
+        //TODO: declare all variables up here!
         //read first character of user input <TO> char
         char to = '\0';
         std::cin >> to;
