@@ -8,12 +8,146 @@
 
 #include "user.h"
 
+//default constructor
+User::User() : Game() {
+    game_starting();
+}
+
+//starting banner and message
+void User::game_starting() {
+    std::cout << "****************************************************\n";
+    std::cout << "**       Solitaire for the Bored Programmer       **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Welcome to Solitaire!                         **\n";
+    std::cout << "**  Tableau: main body of cards                   **\n";
+    std::cout << "**  Foundations: piles of suits to add cards      **\n";
+    std::cout << "**  Hand: top left are to draw remaining cards    **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Rules:                                        **\n";
+    std::cout << "**  1. Tableau cards must alternate color         **\n";
+    std::cout << "**  2. Tableau cards must descend in rank         **\n";
+    std::cout << "**  3. Foundation cards must match suit           **\n";
+    std::cout << "**  4. Foundation cards must ascend in rank       **\n";
+    std::cout << "**  5. User input accepted after the % prompt     **\n";
+    std::cout << "**  6. Input should adhere to move formats        **\n";
+    std::cout << "**  7. Below are the possible moves and formats   **\n";
+    std::cout << "**  8. Letters may be lower or upper case         **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Draw card [FROM] Hand:                        **\n";
+    std::cout << "**  D                                             **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move [TO] Tableau [FROM] Tableau:             **\n";
+    std::cout << "**  T <ROW> <COL> T <ROW> <COL> ex. T 1 1 T 2 2   **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move [TO] Tableau [FROM] Hand:                **\n";
+    std::cout << "**  T <ROW> <COL> H ex. T 1 1 H                   **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move [TO] Tableau [FROM] Foundation:          **\n";
+    std::cout << "**  T <ROW> <COL> F <SUIT> ex. T 1 1 F S          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move [TO] Foundation [FROM] Tableau:          **\n";
+    std::cout << "**  F <SUIT> T <ROW> <COL> ex. F S T 1 1          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Move [TO] Foundation [FROM] Hand:             **\n";
+    std::cout << "**  F <SUIT> H ex. F S H                          **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**                     Enjoy!                     **\n";
+    std::cout << "****************************************************\n\n\n";
+    
+    //retrieve name from user
+    std::cout << "What is your name? % ";
+    getline(std::cin, name);
+    
+    std::cout << "Welcome " << get_name() << "! game starting...\n\n";
+}
+
+//check if game ended
+bool User::is_game_over() const {
+    return game_over;
+}
+
+//return user name
+std::string User::get_name() const {
+    return name;
+}
+
+//set user score
+void User::set_score() {
+    //TODO: score adjustment according to timing
+}
+
+//return user score
+unsigned User::get_score() const {
+    return score;
+}
+
+//return completion status
+bool User::is_complete() const {
+    return heart && spade && diamond && club;
+}
+
+//print appropriate message and spaces
+static void add_spaces(const unsigned length, const unsigned remaining) {
+    for (unsigned i = 0; i < remaining - length; ++i) {
+        std::cout << " ";
+    }
+}
+void User::end_print(const std::string output) const {
+    unsigned remaining;
+    if (is_complete()) {
+        std::cout << "**  Congratulations " << output << "!";
+        remaining = 29;
+    }
+    else {
+        std::cout << "**  Thanks for playing " << output << "!";
+        remaining = 26;
+    }
+    add_spaces(static_cast<unsigned>(output.length()), remaining);
+    std::cout << "**\n";
+}
+void User::end_print(const char type) const {
+    unsigned remaining = 39;
+    unsigned num = type == 'S' ? get_score() : get_num_moves();
+    std::string stat = type == 'S' ? "Score: " : "Moves: ";
+    std::cout << "**  " << stat << num;
+    add_spaces(static_cast<unsigned>(std::to_string(num).length()), remaining);
+    std::cout << "**\n";
+}
+
+//ending banner and message
+void User::game_ending() const {
+    std::cout << "****************************************************\n";
+    std::cout << "**       Solitaire for the Bored Programmer       **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**                                                **\n";
+    end_print(get_name());
+    std::cout << "**                                                **\n";
+    std::cout << "**  Game Ended with...                            **\n";
+    end_print('S');
+    end_print('M');
+    std::cout << "**  Time: ?                                       **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "****************************************************\n";
+    std::cout << "**               github.com/smikell               **\n";
+    std::cout << "****************************************************\n";
+}
+
 //check suit input validity
 bool User::check_suit(char input) const {
     if (SUIT_CHECK.find(input) != SUIT_CHECK.end()) {
         return true;
     }
     return false;
+}
+
+//check coords input validity
+bool User::check_coords(const size_t row, const size_t col) const {
+    if (row > MAX_ROWS || col > MAX_COLS) {
+        return false;
+    }
+    return true;
 }
 
 //draw card from hand
@@ -41,8 +175,8 @@ void User::draw() {
 }
 
 //move card to foundation
-void User::move_foundation(char dest, char move,
-                           std::pair<size_t, size_t> move_coords) {
+void User::move_foundation(const char dest, const char move,
+                           const std::pair<size_t, size_t> move_coords) {
     //TODO: Handle Dest errors in main
     //TODO: error check for proper suit, proper coordinates if passed (move is T)
     //TODO: error check for moves based on dest and source
@@ -74,8 +208,8 @@ void User::move_foundation(char dest, char move,
 }
 
 //move card to or within tableau
-void User::move_tableau(char dest, std::pair<size_t, size_t> dest_coords,
-                        char move, std::pair<size_t, size_t> move_coords) {
+void User::move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
+                        const char move, const std::pair<size_t, size_t> move_coords) {
     //TODO: error checks
     
     
@@ -84,33 +218,4 @@ void User::move_tableau(char dest, std::pair<size_t, size_t> dest_coords,
     //remove card from old position
     //increment num moves
     //update score
-}
-
-//move card from hand to foundation
-void User::move_hand_to_foundation(char suit) {
-    //if not turned, error (can only move a turned card from hand)
-    //if (!drawn) int exception; //thorw exception
-    //take front of deck, move to specified foundation
-    
-    //increment num moves
-    //update score
-    //check that card moved matches the suit and is in correct order
-    //otherwise throw error
-    //move error, suit error, value error
-}
-//move card from hand to tableau
-void User::move_hand_to_tableau() {
-    //check that opposite suit and less by one than previous card
-}
-//move card from tableau to foundation
-void User::move_tableau_to_foundation() {
-    
-}
-//move card from foundation to tableau
-void User::move_foundation_to_tableau() {
-    
-}
-//move card within tableau columns
-void User::move_in_tableau() {
-    
 }

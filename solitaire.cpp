@@ -13,6 +13,17 @@
 int main(int argc, char* argv[]) {
     xcode_redirect(argc, argv);
     std::ios_base::sync_with_stdio(false);
+    
+    //start game, shuffle, and deal
+    User game;
+    game.shuffle();
+    game.deal();
+    //accept input from user while game continues
+    
+    
+    game.game_ending();
+    
+    
     //char mode = read_command_line(argc, argv);
     
     //print starting message, ? command should be for help
@@ -23,7 +34,7 @@ int main(int argc, char* argv[]) {
         // <char> is <D>
         // <to> can be <F> <Suit> OR <T> <Row> <Col>
         // <from> can be <H> OR <F> <Suit> OR <T> <Row> <Col>
-    
+    /*
     Card c;
     //while game not over
     while (c.is_turned()) {
@@ -35,15 +46,7 @@ int main(int argc, char* argv[]) {
             
         }
     }
-    
-    User test;
-    test.shuffle();
-    test.deal();
-    test.draw();
-    //test.move_foundation('S', 'H');
-    //test.move_foundation('S', 'T', {0, 1});
-    
-    //ERROR CHECK COMMAND INPUT IN MAIN
+    */
     
     /*
      C++ Solitaire: backend in C++ then figure out how to get that on the web so can play online. Have leaderboards for fastest overall time and personal best times. Also derive a point system and display high scores and personal high scores, gain certain number of points depending on Time Passed and Card Placed. Use SQL for the database behind the scenes rather than something like Firebase. Use Flask framework to get C++ backend through Python onto web app. Use HTML, CSS, or JS for Front end. React Front End! Follow style guidelines and tutorials from EECS 381 Website. Also when get to pushing it to Web, follow 485 Tutorials for HTML, CSS, JS, SQL, and More.
@@ -95,3 +98,6 @@ char read_command_line(int argc, char* argv[]) {
     return mode;
 } //read_command_line
 */
+
+
+//secret easter egg function for rare scenario where a King ends up at bottom of 7th column and stack cards all the way down to bottom: maybe hide a gift card or something

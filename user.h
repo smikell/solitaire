@@ -10,9 +10,13 @@
 #define user_h
 
 #include "game.h"
-#include <utility>
+#include <string>
 
 class InputError : public std::exception {
+    
+};
+
+class InvalidFormat : public InputError {
     
 };
 
@@ -26,40 +30,54 @@ class DrawError : public MoveError {
 
 class User : public Game {
 public:
-    User() : Game() {}
-    
+    //default constructor
+    User();
+    //starting banner and message
+    void game_starting();
+    //check if game ended
+    bool is_game_over() const;
+    //return user name
+    std::string get_name() const;
+    //set user score
+    void set_score();
+    //return user score
+    unsigned get_score() const;
+    //return completion status
+    bool is_complete() const;
+    //print appropriate message and spaces
+    void end_print(const std::string output) const;
+    void end_print(const char type) const;
+    //ending banner and message
+    void game_ending() const;
     //check suit input validity
-    bool check_suit(char input) const;
-    
+    bool check_suit(const char input) const;
+    //check coords input validity
+    bool check_coords(const size_t row, const size_t col) const;
     //draw card from hand
     void draw() override;
+    
     //move card to foundation
     //dest is destination suit
     //move is tableau or hand
     //optional pair of coordinates
-    void move_foundation(char dest, char move,
-                         std::pair<size_t, size_t> move_coords={0,0});
+    void move_foundation(const char dest, const char move,
+                         const std::pair<size_t, size_t> move_coords={0,0}) override;
+    
     //move card to or within tableau
     //move is tableau or hand
     //optional pair of coordinates
-    void move_tableau(char dest, std::pair<size_t, size_t> dest_coords,
-                      char move, std::pair<size_t, size_t> move_coords={0,0});
-    
-    
-    
-    //move card from hand to foundation
-    void move_hand_to_foundation(char suit) override;
-    //move card from hand to tableau
-    void move_hand_to_tableau() override;
-    //move card from tableau to foundation
-    void move_tableau_to_foundation() override;
-    //move card from foundation to tableau
-    void move_foundation_to_tableau() override;
-    //move card within tableau columns
-    void move_in_tableau() override;
+    void move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
+                      const char move, const std::pair<size_t, size_t> move_coords={0,0}) override;
     
 private:
-    int score = 0;
+    //track user score as game progresses
+    unsigned score = 0;
+    //user entered name
+    std::string name;
+    //statuses for each suit foundation completion
+    bool heart, spade, diamond, club = false;
+    //end game when user wins
+    bool game_over = false;
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
 };
 

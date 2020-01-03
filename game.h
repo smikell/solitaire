@@ -16,14 +16,15 @@
 #include <random>
 #include <chrono>
 #include <unordered_set>
+#include <unordered_map>
 
 class Game {
 public:
     //ctor for Game, resizes members appropriately
     Game() {
-        deck.resize(52);
-        tableau.resize(20, std::vector<Card>(7));
-        foundations.resize(4);
+        deck.resize(NUM_CARDS);
+        tableau.resize(MAX_ROWS, std::vector<Card>(MAX_COLS));
+        foundations.resize(NUM_SUITS);
     }
     
     //shuffle deck prior to starting game
@@ -32,38 +33,34 @@ public:
     void deal();
     //print hand, foundations, and tableau to screen
     void print_game() const;
-    
+    //return number of moves
+    unsigned get_num_moves() const;
     //draw card from hand
     virtual void draw() = 0;
     //move card to foundation
-    //virtual void move_foundation() = 0;
+    virtual void move_foundation(const char dest, const char move,
+                                 const std::pair<size_t, size_t> move_coords={0,0}) = 0;
     //move card to or within tableau
-    //virtual void move_tableau() = 0;
-    
-    //move card from hand to foundation
-    virtual void move_hand_to_foundation(char suit) = 0;
-    //move card from hand to tableau
-    virtual void move_hand_to_tableau() = 0;
-    //move card from tableau to foundation
-    virtual void move_tableau_to_foundation() = 0;
-    //move card from foundation to tableau
-    virtual void move_foundation_to_tableau() = 0;
-    //move card within tableau columns
-    virtual void move_in_tableau() = 0;
-    
+    virtual void move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
+                              const char move, const std::pair<size_t, size_t> move_coords={0,0}) = 0;
     
 private:
     friend class User;
+    const size_t NUM_SUITS = 4;
+    const size_t NUM_RANKS = 13;
+    const size_t NUM_CARDS = 52;
     const size_t MAX_COLS = 7;
-    const size_t MAX_ROWS = 20;
+    const size_t MAX_ROWS = 19;
     //unordered set of suit characters to check against input
     const std::unordered_set<char> SUIT_CHECK = {'H', 'S', 'D', 'C'};
+    //game containers for cards
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
     std::vector<std::stack<Card>> foundations;
-    unsigned num_moves = 0;
     //print hidden hand alongside flipped card when draw from hand
     bool drawn = false;
+    //number of moves in game
+    unsigned num_moves = 0;
 };
 
 #endif /* game_h */

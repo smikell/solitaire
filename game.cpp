@@ -67,13 +67,13 @@ void Game::deal() {
 void Game::print_game() const {
     //print hand
     if (deck.empty()) {
-        std::cout << "          ";
+        std::cout << "D         ";
     }
     else if (drawn) {
         std::cout << deck[1] << " " << deck.front() << "    ";
     }
     else {
-        std::cout << deck.front() << "D      ";
+        std::cout << deck.front() << "      ";
     }
     //print foundations
     for (const std::stack<Card>& pile : foundations) {
@@ -103,4 +103,10 @@ void Game::print_game() const {
         std::cout << " " << ++row_num;
         std::cout << "\n";
     }
+    //TODO: ADD TIME FUNCTION
+}
+
+//return number of moves
+unsigned Game::get_num_moves() const {
+    return num_moves;
 }
