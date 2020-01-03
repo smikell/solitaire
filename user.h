@@ -12,6 +12,11 @@
 #include "game.h"
 #include <string>
 
+struct UserInput {
+    char to, from, to_suit, from_suit = '\0';
+    size_t to_row, to_col, from_row, from_col = 0;
+};
+
 class InputError : public std::exception {
 public:
     InputError() : msg{"Input Error: "} {}
@@ -73,14 +78,12 @@ public:
     void help_message();
     //check if game ended
     bool is_game_over() const;
-    //return user name
-    std::string get_name() const;
-    //set user score
-    void set_score();
-    //return user score
-    unsigned get_score() const;
     //return completion status
     bool is_complete() const;
+    //return user name
+    std::string get_name() const;
+    //return user score
+    unsigned get_score() const;
     //print appropriate message and spaces
     void end_print(const std::string output) const;
     void end_print(const char type) const;
@@ -90,6 +93,8 @@ public:
     void check_suit(const char input) const;
     //check coords input validity
     void check_coords(const size_t row, const size_t col) const;
+    //update user score
+    void update_score();
     //draw card from hand
     void draw() override;
     
@@ -97,14 +102,14 @@ public:
     //dest is destination suit
     //move is tableau or hand
     //optional pair of coordinates
-    void move_foundation(const char dest, const char move,
+    void move_foundation(const char dest_suit, const char move_from,
                          const std::pair<size_t, size_t> move_coords={0,0}) override;
     
     //move card to or within tableau
     //move is tableau or hand
     //optional pair of coordinates
-    void move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
-                      const char move, const std::pair<size_t, size_t> move_coords={0,0}) override;
+    void move_tableau(const std::pair<size_t, size_t> dest_coords,
+                      const char move_from, const std::pair<size_t, size_t> move_coords={0,0}) override;
     
 private:
     //track user score as game progresses

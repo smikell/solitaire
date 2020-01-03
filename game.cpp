@@ -65,6 +65,7 @@ void Game::deal() {
 
 //print hand, foundations, and tableau to screen
 void Game::print_game() const {
+    std::cout << "\n";
     //print hand
     if (deck.empty()) {
         std::cout << "D         ";

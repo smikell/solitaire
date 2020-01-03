@@ -37,12 +37,13 @@ public:
     unsigned get_num_moves() const;
     //draw card from hand
     virtual void draw() = 0;
+    //MOVE FUNCTION THAT USES BRANCHES TO CHECK <TO> <FROM> VALIDITY
     //move card to foundation
-    virtual void move_foundation(const char dest, const char move,
+    virtual void move_foundation(const char dest_suit, const char move_from,
                                  const std::pair<size_t, size_t> move_coords={0,0}) = 0;
     //move card to or within tableau
-    virtual void move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
-                              const char move, const std::pair<size_t, size_t> move_coords={0,0}) = 0;
+    virtual void move_tableau(const std::pair<size_t, size_t> dest_coords,
+                              const char move_from, const std::pair<size_t, size_t> move_coords={0,0}) = 0;
     
 private:
     friend class User;

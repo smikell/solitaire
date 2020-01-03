@@ -27,13 +27,13 @@ int main(int argc, char* argv[]) {
     while (!game.is_game_over()) {
         //print prompt to accept input
         std::cout << "% ";
-        //TODO: declare all variables up here!
+        //user input object
+        UserInput in;
         //read first character of user input <TO> char
-        char to = '\0';
-        std::cin >> to;
+        std::cin >> in.to;
         try {
             check_cin();
-            if (toupper(to) == 'D') {
+            if (toupper(in.to) == 'D') {
                 //eat remaining line
                 std::string junk;
                 getline(std::cin, junk);
@@ -41,19 +41,24 @@ int main(int argc, char* argv[]) {
                 game.draw();
                 continue;
             }
-            else if (toupper(to) == 'F') {
-                //read more
-                
+            else if (toupper(in.to) == 'F') {
+                //read following suit and error check
+                std::cin >> in.to_suit;
+                check_cin();
+                game.check_suit(in.to_suit);
             }
-            else if (toupper(to) == 'T') {
-                //read more
+            else if (toupper(in.to) == 'T') {
+                //read following coords and error check
+                std::cin >> in.to_row >> in.to_col;
+                check_cin();
+                game.check_coords(in.to_row, in.to_col);
             }
-            else if (toupper(to) == '?') {
+            else if (toupper(in.to) == '?') {
                 //reprint move options
                 game.help_message();
                 continue;
             }
-            else if (toupper(to) == 'Q') {
+            else if (toupper(in.to) == 'Q') {
                 //quit game
                 break;
             }
@@ -65,17 +70,22 @@ int main(int argc, char* argv[]) {
             }
             std::cout << "to success\n";
             //read <FROM> char
-            char from = '\0';
-            std::cin >> from;
+            std::cin >> in.from;
             check_cin();
-            if (toupper(from) == 'H') {
+            if (toupper(in.from) == 'H') {
                 //nothing to do here
             }
-            else if (toupper(from) == 'F') {
-                //read more
+            else if (toupper(in.from) == 'F') {
+                //read following suit and error check
+                std::cin >> in.from_suit;
+                check_cin();
+                game.check_suit(in.from_suit);
             }
-            else if (toupper(from) == 'T') {
-                //read more
+            else if (toupper(in.from) == 'T') {
+                //read following coords and error check
+                std::cin >> in.from_row >> in.from_col;
+                check_cin();
+                game.check_coords(in.from_row, in.from_col);
             }
             else {
                 //no matching <FROM>, eat remaining line, throw invalid input error
@@ -84,40 +94,26 @@ int main(int argc, char* argv[]) {
                 throw InvalidInput("Invalid Input, no matching <FROM> move");
             }
             std::cout << "from success\n";
+            //eat remaining line
+            std::string junk;
+            getline(std::cin, junk);
+            //call move(custom struct);
         }
         catch (const InputError& input) {
             std::cout << input.error() << "\n";
             continue;
         }
         catch (const MoveError& move) {
-            std::cout << "\n";
+            std::cout << move.error() << "\n";
             continue;
         }
         catch (...) {
             std::cout << "Caught unknown error\n";
             continue;
         }
-        
-        
     }
     
     game.game_ending();
-    
-    
-    //char mode = read_command_line(argc, argv);
-    
-    //print starting message, ? command should be for help
-    
-    /*
-     C++ Solitaire: backend in C++ then figure out how to get that on the web so can play online. Have leaderboards for fastest overall time and personal best times. Also derive a point system and display high scores and personal high scores, gain certain number of points depending on Time Passed and Card Placed. Use SQL for the database behind the scenes rather than something like Firebase. Use Flask framework to get C++ backend through Python onto web app. Use HTML, CSS, or JS for Front end. React Front End! Follow style guidelines and tutorials from EECS 381 Website. Also when get to pushing it to Web, follow 485 Tutorials for HTML, CSS, JS, SQL, and More.
-     - Game variation: include jokers, must be in deck, if draw a joker, then something happens (maybe can play it somewhere like a king, but can only last so long, maybe lose points for every round it’s on the board, maybe can use one as a wild card and the other as the negative points, maybe both can be wild cards for certain spots, but cards that are replaced are still needed, so will need to find a replacement location, maybe jokers take on the number that they are replaced with (and suit) and they must be treated as such going forward, and will still need to replace)
-     - TWO VERSIONS: one just in C++ for individual use, one pretty shiny version online with a couple more features
-     - Two modes: original + wild card (joker)
-     - Have user input be int int, int where first represents card column second represents position in column, third represents where want to move card at position
-     - Make use of try catch and exceptions when dealing with all sorts of error handling with invalid card moves?
-     - Use basic shuffling from euchre project
-     - Need to update table each time move cards around. Will be best for printing’s sake. Maybe store all cards in such? Use a 2D vector? Use a terminating card to represent when stop printing, OR store size of each column at top of column for reference when printing. Need to allocate proper size: think about what’s the maximum size of a column in solitaire? 13?
-    */
     
     return 0;
 }
@@ -134,6 +130,17 @@ void check_cin() {
         throw BadInput("Bad Input caused cin failure");
     }
 }
+
+    /*
+     C++ Solitaire: backend in C++ then figure out how to get that on the web so can play online. Have leaderboards for fastest overall time and personal best times. Also derive a point system and display high scores and personal high scores, gain certain number of points depending on Time Passed and Card Placed. Use SQL for the database behind the scenes rather than something like Firebase. Use Flask framework to get C++ backend through Python onto web app. Use HTML, CSS, or JS for Front end. React Front End! Follow style guidelines and tutorials from EECS 381 Website. Also when get to pushing it to Web, follow 485 Tutorials for HTML, CSS, JS, SQL, and More.
+     - Game variation: include jokers, must be in deck, if draw a joker, then something happens (maybe can play it somewhere like a king, but can only last so long, maybe lose points for every round it’s on the board, maybe can use one as a wild card and the other as the negative points, maybe both can be wild cards for certain spots, but cards that are replaced are still needed, so will need to find a replacement location, maybe jokers take on the number that they are replaced with (and suit) and they must be treated as such going forward, and will still need to replace)
+     - TWO VERSIONS: one just in C++ for individual use, one pretty shiny version online with a couple more features
+     - Two modes: original + wild card (joker)
+     - Have user input be int int, int where first represents card column second represents position in column, third represents where want to move card at position
+     - Make use of try catch and exceptions when dealing with all sorts of error handling with invalid card moves?
+     - Use basic shuffling from euchre project
+     - Need to update table each time move cards around. Will be best for printing’s sake. Maybe store all cards in such? Use a 2D vector? Use a terminating card to represent when stop printing, OR store size of each column at top of column for reference when printing. Need to allocate proper size: think about what’s the maximum size of a column in solitaire? 13?
+    */
 
 /*
 char read_command_line(int argc, char* argv[]) {

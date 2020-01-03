@@ -32,7 +32,7 @@ void User::game_starting() {
     std::cout << "**  4. If press enter with incomplete arguments,  **\n";
     std::cout << "**     program waits for finish before executing  **\n";
     std::cout << "**  5. Letters may be lower or upper case         **\n";
-    std::cout << "**  6. After valid move read, rest of line eaten  **\n";
+    std::cout << "**  6. Input line after valid move is ignored     **\n";
     std::cout << "**  7. SUIT valid char, ROW <= 19, COL <= 7       **\n";
     std::cout << "**  8. Below are acceptable moves and formats     **\n";
     std::cout << "**                                                **\n";
@@ -69,17 +69,18 @@ void User::game_starting() {
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
     std::cout << "**                     Enjoy!                     **\n";
-    std::cout << "****************************************************\n\n\n";
+    std::cout << "****************************************************\n\n";
     
     //retrieve name from user
     std::cout << "What is your name? % ";
     getline(std::cin, name);
     
-    std::cout << "Welcome " << get_name() << "! game starting...\n\n";
+    std::cout << "Welcome " << get_name() << "! game starting...\n";
 }
 
 //help message for move format
 void User::help_message() {
+    std::cout << "\n";
     std::cout << "****************************************************\n";
     std::cout << "**                   Move Table                   **\n";
     std::cout << "****************************************************\n";
@@ -111,8 +112,8 @@ void User::help_message() {
     std::cout << "**  F <SUIT> H ex. F S H                          **\n";
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
-    std::cout << "**                 Patience is Key!               **\n";
-    std::cout << "****************************************************\n\n\n";
+    std::cout << "**                Patience is Key!                **\n";
+    std::cout << "****************************************************\n";
     
     print_game();
 }
@@ -122,24 +123,19 @@ bool User::is_game_over() const {
     return game_over;
 }
 
+//return completion status
+bool User::is_complete() const {
+    return heart && spade && diamond && club;
+}
+
 //return user name
 std::string User::get_name() const {
     return name;
 }
 
-//set user score
-void User::set_score() {
-    //TODO: score adjustment according to timing
-}
-
 //return user score
 unsigned User::get_score() const {
     return score;
-}
-
-//return completion status
-bool User::is_complete() const {
-    return heart && spade && diamond && club;
 }
 
 //print appropriate message and spaces
@@ -172,6 +168,7 @@ void User::end_print(const char type) const {
 
 //ending banner and message
 void User::game_ending() const {
+    std::cout << "\n";
     std::cout << "****************************************************\n";
     std::cout << "**       Solitaire for the Bored Programmer       **\n";
     std::cout << "****************************************************\n";
@@ -184,13 +181,17 @@ void User::game_ending() const {
     std::cout << "**  Time: ?                                       **\n";
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
-    std::cout << "**               github.com/smikell               **\n";
+    std::cout << "**          github.com/smikell/solitaire          **\n";
     std::cout << "****************************************************\n";
 }
 
 //check suit input validity
 void User::check_suit(char input) const {
-    if (SUIT_CHECK.find(input) == SUIT_CHECK.end()) {
+    if (SUIT_CHECK.find(toupper(input)) == SUIT_CHECK.end()) {
+        //eat remaining line
+        std::string junk;
+        getline(std::cin, junk);
+        //throw error
         throw InvalidInput("Invalid Input, invalid suit");
     }
 }
@@ -198,8 +199,17 @@ void User::check_suit(char input) const {
 //check coords input validity
 void User::check_coords(const size_t row, const size_t col) const {
     if (row > MAX_ROWS || col > MAX_COLS) {
+        //eat remaining line
+        std::string junk;
+        getline(std::cin, junk);
+        //throw error
         throw InvalidInput("Invalid Input, invalid coordinates (ROW or COL)");
     }
+}
+
+//update user score
+void User::update_score() {
+    //TODO: score adjustment according to timing
 }
 
 //draw card from hand
@@ -222,11 +232,12 @@ void User::draw() {
     //set drawn status
     drawn = true;
     ++num_moves;
+    std::cout << "\nSuccessful Move: Card drawn from hand\n";
     print_game();
 }
 
 //move card to foundation
-void User::move_foundation(const char dest, const char move,
+void User::move_foundation(const char dest_suit, const char move_from,
                            const std::pair<size_t, size_t> move_coords) {
     //TODO: Handle Dest errors in main
     //TODO: error check for proper suit, proper coordinates if passed (move is T)
@@ -235,7 +246,7 @@ void User::move_foundation(const char dest, const char move,
         //if source is tableau, check if coordinates
     
     //move from tableau
-    if (move == 'T') {
+    if (move_from == 'T') {
         //error check for proper coordinates (within bounds)
         //error check for proper coordinates (card is up && in)
         //error check for proper coordinates (next row down is not up && not in)
@@ -243,7 +254,7 @@ void User::move_foundation(const char dest, const char move,
         
     }
     //move from hand
-    else if (move == 'H'){
+    else if (move_from == 'H'){
         
     }
     //otherwise invalid move input
@@ -259,8 +270,8 @@ void User::move_foundation(const char dest, const char move,
 }
 
 //move card to or within tableau
-void User::move_tableau(const char dest, const std::pair<size_t, size_t> dest_coords,
-                        const char move, const std::pair<size_t, size_t> move_coords) {
+void User::move_tableau(const std::pair<size_t, size_t> dest_coords,
+                        const char move_from, const std::pair<size_t, size_t> move_coords) {
     //TODO: error checks
     
     
