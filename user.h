@@ -13,26 +13,61 @@
 #include <string>
 
 class InputError : public std::exception {
-    
+public:
+    InputError() : msg{"Input Error: "} {}
+    std::string error() const {
+        return msg;
+    }
+    void update_msg(std::string add) {
+        msg += add;
+    }
+private:
+    std::string msg;
 };
 
-class InvalidFormat : public InputError {
-    
+class BadInput : public InputError {
+public:
+    BadInput(const std::string& error) {
+        update_msg(error);
+    }
+};
+
+class InvalidInput : public InputError {
+public:
+    InvalidInput(const std::string& error) {
+        update_msg(error);
+    }
 };
 
 class MoveError : public std::exception {
-    
+public:
+    MoveError() : msg{"Move Error: "} {}
+    std::string error() const {
+        return msg;
+    }
+    void update_msg(std::string add) {
+        msg += add;
+    }
+private:
+    std::string msg;
 };
 
 class DrawError : public MoveError {
-    
+public:
+    DrawError(const std::string& error) {
+        update_msg(error);
+    }
 };
+
+//foundaiton error
+
+//tableau error
 
 class User : public Game {
 public:
     //default constructor
     User();
-    //starting banner and message
+    //starting banner and introduction
     void game_starting();
     //check if game ended
     bool is_game_over() const;
@@ -50,9 +85,9 @@ public:
     //ending banner and message
     void game_ending() const;
     //check suit input validity
-    bool check_suit(const char input) const;
+    void check_suit(const char input) const;
     //check coords input validity
-    bool check_coords(const size_t row, const size_t col) const;
+    void check_coords(const size_t row, const size_t col) const;
     //draw card from hand
     void draw() override;
     

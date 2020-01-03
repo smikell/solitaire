@@ -10,6 +10,9 @@
 
 //char read_command_line(int argc, char* argv[]);
 
+//check cin status after each input read
+void check_cin();
+
 int main(int argc, char* argv[]) {
     xcode_redirect(argc, argv);
     std::ios_base::sync_with_stdio(false);
@@ -19,7 +22,72 @@ int main(int argc, char* argv[]) {
     game.shuffle();
     game.deal();
     //accept input from user while game continues
-    
+    while (!game.is_game_over()) {
+        //print prompt to accept input
+        std::cout << "% ";
+        //read first character of user input <TO> char
+        char to = '\0';
+        std::cin >> to;
+        try {
+            check_cin();
+            if (toupper(to) == 'D') {
+                //eat remaining line
+                std::string junk;
+                getline(std::cin, junk);
+                //draw card from hand
+                game.draw();
+                continue;
+            }
+            else if (toupper(to) == 'F') {
+                //read more
+                
+            }
+            else if (toupper(to) == 'T') {
+                //read more
+            }
+            else {
+                //no matching <TO>, eat remaining line, throw invalid input error
+                std::string junk;
+                getline(std::cin, junk);
+                throw InvalidInput("Invalid Input, no matching <TO> move");
+            }
+            std::cout << "to success\n";
+            //read <FROM> char
+            char from = '\0';
+            std::cin >> from;
+            check_cin();
+            if (toupper(from) == 'H') {
+                //nothing to do here
+            }
+            else if (toupper(from) == 'F') {
+                //read more
+            }
+            else if (toupper(from) == 'T') {
+                //read more
+            }
+            else {
+                //no matching <FROM>, eat remaining line, throw invalid input error
+                std::string junk;
+                getline(std::cin, junk);
+                throw InvalidInput("Invalid Input, no matching <FROM> move");
+            }
+            std::cout << "from success\n";
+        }
+        catch (const InputError& input) {
+            std::cout << input.error() << "\n";
+            continue;
+        }
+        catch (const MoveError& move) {
+            std::cout << "\n";
+            continue;
+        }
+        catch (...) {
+            std::cout << "Caught unknown error\n";
+            continue;
+        }
+        
+        
+    }
     
     game.game_ending();
     
@@ -27,26 +95,6 @@ int main(int argc, char* argv[]) {
     //char mode = read_command_line(argc, argv);
     
     //print starting message, ? command should be for help
-    
-    //while game not over, accept user input and respond accordingly
-    
-    //moves: <char> OR <to> <from>
-        // <char> is <D>
-        // <to> can be <F> <Suit> OR <T> <Row> <Col>
-        // <from> can be <H> OR <F> <Suit> OR <T> <Row> <Col>
-    /*
-    Card c;
-    //while game not over
-    while (c.is_turned()) {
-        try {
-            
-            
-        }
-        catch(...) {
-            
-        }
-    }
-    */
     
     /*
      C++ Solitaire: backend in C++ then figure out how to get that on the web so can play online. Have leaderboards for fastest overall time and personal best times. Also derive a point system and display high scores and personal high scores, gain certain number of points depending on Time Passed and Card Placed. Use SQL for the database behind the scenes rather than something like Firebase. Use Flask framework to get C++ backend through Python onto web app. Use HTML, CSS, or JS for Front end. React Front End! Follow style guidelines and tutorials from EECS 381 Website. Also when get to pushing it to Web, follow 485 Tutorials for HTML, CSS, JS, SQL, and More.
@@ -62,6 +110,20 @@ int main(int argc, char* argv[]) {
     
     return 0;
 }
+
+//check cin status after each input read
+void check_cin() {
+    //if cin in fail state
+    if (std::cin.fail()) {
+        //fix cin and remove junk
+        std::cin.clear();
+        std::string junk;
+        getline(std::cin, junk);
+        //throw exception to handle error
+        throw BadInput("Bad Input caused cin failure");
+    }
+}
+
 /*
 char read_command_line(int argc, char* argv[]) {
     char mode = '\0';
