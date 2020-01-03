@@ -216,6 +216,40 @@ void User::draw() {
     print_game();
 }
 
+//checks move for validity and calls appropriate move
+void User::move(UserInput input) {
+    //all input valid at this point since checked in main
+    //branches will determine which valid move combination is called
+    if (toupper(input.to) == 'F') {
+        if (toupper(input.from) == 'H') {
+            move_foundation(toupper(input.to_suit), toupper(input.from));
+            return;
+        }
+        else if (toupper(input.from) == 'T') {
+            move_foundation(toupper(input.to_suit), toupper(input.from),
+                            std::make_pair(input.from_row, input.from_col));
+            return;
+        }
+    }
+    else if (toupper(input.to) == 'T') {
+        if (toupper(input.from) == 'H') {
+            move_tableau(std::make_pair(input.to_row, input.to_col), toupper(input.from));
+            return;
+        }
+        else if (toupper(input.from) == 'T') {
+            move_tableau(std::make_pair(input.to_row, input.to_col),
+                         toupper(input.from), std::make_pair(input.from_row, input.from_col));
+            return;
+        }
+        else if (toupper(input.from) == 'F') {
+            move_tableau(std::make_pair(input.to_row, input.to_col), toupper(input.from_suit));
+            return;
+        }
+    }
+    //if reach this point, no valid move was executed since never reached a return statement
+    throw MoveError("Invalid Move, enter ? for move options");
+}
+
 //move card to foundation
 void User::move_foundation(const char dest_suit, const char move_from,
                            const std::pair<size_t, size_t> move_coords) {
