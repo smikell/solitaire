@@ -97,7 +97,8 @@ int main(int argc, char* argv[]) {
             //eat remaining line
             std::string junk;
             getline(std::cin, junk);
-            //call move(custom struct);
+            //call move
+            game.move(in);
         }
         catch (const InputError& input) {
             std::cout << input.error() << "\n";
