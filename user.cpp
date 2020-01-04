@@ -222,78 +222,70 @@ void User::move(UserInput input) {
     //all input valid at this point since checked in main
     //branches will determine which valid move combination is called
     if (toupper(input.to) == 'F') {
+        //suit index to add card to in foundations
+        size_t dest_suit = toupper(input.to_suit) == 'H' ? 0 :
+                           toupper(input.to_suit) == 'S' ? 1 :
+                           toupper(input.to_suit) == 'D' ? 2 :
+                           toupper(input.to_suit) == 'C' ? 3 : std::numeric_limits<size_t>::infinity();
         if (toupper(input.from) == 'H') {
-            move_foundation(toupper(input.to_suit), toupper(input.from));
-            return;
+            move_to_foundation_from_hand(dest_suit);
         }
         else if (toupper(input.from) == 'T') {
-            move_foundation(toupper(input.to_suit), toupper(input.from),
-                            std::make_pair(input.from_row, input.from_col));
-            return;
+            move_to_foundation_from_tableau(dest_suit, std::make_pair(input.from_row, input.from_col));
         }
+        else {
+            throw FoundationError("Invalid Move, cannot move from one foundation to another");
+        }
+        update_score();
     }
     else if (toupper(input.to) == 'T') {
+        //coordinates to add card to in tableau
+        std::pair<size_t, size_t> dest_coords = std::make_pair(input.to_row, input.to_col);
         if (toupper(input.from) == 'H') {
-            move_tableau(std::make_pair(input.to_row, input.to_col), toupper(input.from));
-            return;
-        }
-        else if (toupper(input.from) == 'T') {
-            move_tableau(std::make_pair(input.to_row, input.to_col),
-                         toupper(input.from), std::make_pair(input.from_row, input.from_col));
-            return;
+            move_to_tableau_from_hand(dest_coords);
         }
         else if (toupper(input.from) == 'F') {
-            move_tableau(std::make_pair(input.to_row, input.to_col), toupper(input.from_suit));
-            return;
+            size_t source_suit = toupper(input.from_suit) == 'H' ? 0 :
+                                 toupper(input.from_suit) == 'S' ? 1 :
+                                 toupper(input.from_suit) == 'D' ? 2 :
+                                 toupper(input.from_suit) == 'C' ? 3 : std::numeric_limits<size_t>::infinity();
+            move_to_tableau_from_foundation(dest_coords, source_suit);
+        }
+        else if (toupper(input.from) == 'T') {
+            move_to_tableau_from_tableau(dest_coords, std::make_pair(input.from_row, input.from_col));
         }
     }
-    //if reach this point, no valid move was executed since never reached a return statement
-    throw MoveError("Invalid Move, enter ? for move options");
+    //game updates
+    ++num_moves;
+    print_game();
 }
 
-//move card to foundation
-void User::move_foundation(const char dest_suit, const char move_from,
-                           const std::pair<size_t, size_t> move_coords) {
-    
-    size_t dest = dest_suit == 'H' ? 0 :
-                  dest_suit == 'S' ? 1 :
-                  dest_suit == 'D' ? 2 :
-                  dest_suit == 'C' ? 3 : std::numeric_limits<size_t>::infinity();
-    //move to foundations[dest].push()
-    //move from tableau
-    if (move_from == 'T') {
-        //error check for proper coordinates (within bounds)
-        //error check for proper coordinates (card is up && in)
-        //error check for proper coordinates (next row down is not up && not in)
-        //check move card is match suit for dest card
-        
+void User::move_to_foundation_from_hand(const size_t dest) {
+    //if no card drawn or deck is empty
+    if (!drawn || deck.empty()) {
+        //throw foundation move error
+        throw FoundationError("Foundation, no card to move from Hand");
     }
-    //move from hand
-    else if (move_from == 'H'){
-        
-    }
-    //otherwise invalid move input
-    else {
-        
-    }
-    
-    //check move card is match suit for dest card
-    //check move card is next rank for dest card
-    //remove move card from old position
-    //incrememnt num moves
-    //update score
+    //check card match suit and next rank for foundation
+    //add card to foundation
+    //remove card from deck
+    //print success
 }
 
-//move card to or within tableau
-void User::move_tableau(const std::pair<size_t, size_t> dest_coords,
-                        const char move_from, const std::pair<size_t, size_t> move_coords) {
-    //TODO: error checks
+void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<size_t, size_t> source) {
+    
+}
+
+void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
+    
+}
+
+void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest, const size_t source) {
+    
+}
+
+void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
+                                        const std::pair<size_t, size_t> source) {
     
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
-    
-    //check move card is opposite suit for dest card
-    //check move card is prev rank for dest card
-    //remove card from old position
-    //increment num moves
-    //update score
 }

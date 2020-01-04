@@ -32,14 +32,14 @@ private:
 
 class BadInput : public InputError {
 public:
-    BadInput(const std::string& error) {
+    BadInput(const std::string& error) : InputError() {
         update_msg(error);
     }
 };
 
 class InvalidInput : public InputError {
 public:
-    InvalidInput(const std::string& error) {
+    InvalidInput(const std::string& error) : InputError() {
         update_msg(error);
     }
 };
@@ -62,14 +62,24 @@ private:
 
 class DrawError : public MoveError {
 public:
-    DrawError(const std::string& error) {
+    DrawError(const std::string& error) : MoveError() {
         update_msg(error);
     }
 };
 
-//foundaiton error
+class FoundationError : public MoveError {
+public:
+    FoundationError(const std::string& error) : MoveError() {
+        update_msg(error);
+    }
+};
 
-//tableau error
+class TableauError : public MoveError {
+public:
+    TableauError(const std::string& error) : MoveError() {
+        update_msg(error);
+    }
+};
 
 class User : public Game {
 public:
@@ -94,12 +104,12 @@ public:
     void draw();
     //checks move for validity and calls appropriate move
     void move(UserInput input);
-    //move card to foundation: dest is destination suit, move is tableau or hand, optional pair of coordinates
-    void move_foundation(const char dest_suit, const char move_from,
-                         const std::pair<size_t, size_t> move_coords={0,0});
-    //move card to or within tableau, move is tableau or hand, optional pair of coordinates
-    void move_tableau(const std::pair<size_t, size_t> dest_coords,
-                      const char move_from, const std::pair<size_t, size_t> move_coords={0,0});
+    void move_to_foundation_from_hand(const size_t dest);
+    void move_to_foundation_from_tableau(const size_t dest, const std::pair<size_t, size_t> source);
+    void move_to_tableau_from_hand(const std::pair<size_t, size_t> dest);
+    void move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest, const size_t source);
+    void move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
+                                      const std::pair<size_t, size_t> source);
     
 private:
     //user entered name
