@@ -16,7 +16,8 @@
 #include <random>
 #include <chrono>
 #include <unordered_set>
-#include <unordered_map>
+
+//TODO: can a container of base classes hold derived class objects? or vice versa?
 
 class Game {
 public:

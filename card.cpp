@@ -41,12 +41,14 @@ bool Card::is_in_tableau() const {
 
 //check if red suit for moves
 bool Card::is_red() const {
-    return get_suit() == Suit::Heart || get_suit() == Suit::Diamond;
+    //OR Empty is meant for case where king is added to empty tableau position
+    return get_suit() == Suit::Heart || get_suit() == Suit::Diamond || get_suit() == Suit::Empty;
 }
 
 //check if black suit for moves
 bool Card::is_black() const {
-    return get_suit() == Suit::Spade || get_suit() == Suit::Club;
+    //OR Empty is meant for case where king is added to empty tableau position
+    return get_suit() == Suit::Spade || get_suit() == Suit::Club || get_suit() == Suit::Empty;
 }
 
 //flip card
@@ -81,8 +83,8 @@ bool Card::opposite_suit(const Card added) const {
 bool Card::next_rank(const Card added) const {
     //TODO: EDGE CASES: adding to a king, adding the king itself, adding ace to none
     //create iterable container of ranks in order
-    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
-        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
+    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
+        Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
     //search through vector for current, check if added's rank is next index
     for (size_t i = 0; i < ranks.size() - 1; ++i) {
         if (get_rank() == ranks[i] && added.get_rank() == ranks[i + 1]) {
@@ -96,8 +98,8 @@ bool Card::next_rank(const Card added) const {
 bool Card::prev_rank(const Card added) const {
     //TODO: EDGE CASES: adding to a king, adding an ace to a two, adding to an ace
     //create iterable container of ranks in order
-    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
-        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
+    std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
+        Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
     //search through vector for current, check if added's rank is previous index
     for (size_t i = 1; i < ranks.size(); ++i) {
         if (get_rank() == ranks[i] && added.get_rank() == ranks[i - 1]) {
@@ -120,6 +122,9 @@ std::ostream& operator<<(std::ostream& out, const Suit& s) {
     }
     else if (s == Suit::Club) {
         out << 'C';
+    }
+    else if (s == Suit::Empty) {
+        out << 'E';
     }
     else {
         out << ' ';

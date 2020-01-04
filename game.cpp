@@ -68,17 +68,19 @@ void Game::print_game() const {
     std::cout << "\n";
     //print hand
     if (deck.empty()) {
-        std::cout << "D         ";
+        std::cout << "E         ";
     }
     else if (drawn) {
-        std::cout << deck[1] << " " << deck.front() << "    ";
+        if (deck.size() == 1) std::cout << "E  ";
+        else std::cout << "** ";
+        std::cout << deck.front() << "    ";
     }
     else {
         std::cout << deck.front() << "      ";
     }
     //print foundations
-    for (const std::stack<Card>& pile : foundations) {
-        std::cout << pile.top() << " ";
+    for (const std::stack<Card>& f : foundations) {
+        std::cout << f.top() << " ";
     }
     std::cout << "\n\n";
     std::cout << "1  2  3  4  5  6  7  \n";

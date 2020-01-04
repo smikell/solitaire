@@ -94,24 +94,16 @@ public:
     void draw();
     //checks move for validity and calls appropriate move
     void move(UserInput input);
-    
-    //move card to foundation
-    //dest is destination suit
-    //move is tableau or hand
-    //optional pair of coordinates
+    //move card to foundation: dest is destination suit, move is tableau or hand, optional pair of coordinates
     void move_foundation(const char dest_suit, const char move_from,
                          const std::pair<size_t, size_t> move_coords={0,0});
-    
-    //move card to or within tableau
-    //move is tableau or hand
-    //optional pair of coordinates
+    //move card to or within tableau, move is tableau or hand, optional pair of coordinates
     void move_tableau(const std::pair<size_t, size_t> dest_coords,
                       const char move_from, const std::pair<size_t, size_t> move_coords={0,0});
     
 private:
     //user entered name
     std::string name;
-    //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
 };
 
 #endif /* user_h */

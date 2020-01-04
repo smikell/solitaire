@@ -12,8 +12,8 @@
 #include <iostream>
 #include <vector>
 
-enum struct Suit {None, Heart, Spade, Diamond, Club};
-enum struct Rank {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King};
+enum struct Suit {None, Heart, Spade, Diamond, Club, Empty};
+enum struct Rank {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Empty};
 
 class Card {
 public:

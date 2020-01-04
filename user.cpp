@@ -28,13 +28,14 @@ void User::game_starting() {
     std::cout << "**  Information:                                  **\n";
     std::cout << "**  1. Tableau cards opposite color, descend rank **\n";
     std::cout << "**  2. Foundation cards match suit, ascend rank   **\n";
-    std::cout << "**  3. User input accepted after the % prompt     **\n";
-    std::cout << "**  4. If press enter with incomplete arguments,  **\n";
+    std::cout << "**  3. E in Tableau or Hand means Empty           **\n";
+    std::cout << "**  4. User input accepted after the % prompt     **\n";
+    std::cout << "**  5. If press enter with incomplete arguments,  **\n";
     std::cout << "**     program waits for finish before executing  **\n";
-    std::cout << "**  5. Letters may be lower or upper case         **\n";
-    std::cout << "**  6. Input line after valid move is ignored     **\n";
-    std::cout << "**  7. SUIT valid char, ROW <= 19, COL <= 7       **\n";
-    std::cout << "**  8. Below are acceptable moves and formats     **\n";
+    std::cout << "**  6. Letters may be lower or upper case         **\n";
+    std::cout << "**  7. Input line after valid move is ignored     **\n";
+    std::cout << "**  8. SUIT valid char, ROW <= 19, COL <= 7       **\n";
+    std::cout << "**  9. Below are acceptable moves and formats     **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Input Format: <TO> <FROM>                     **\n";
     std::cout << "**                                                **\n";
@@ -62,10 +63,10 @@ void User::game_starting() {
     std::cout << "**  Move to Foundation from Hand:                 **\n";
     std::cout << "**  F <SUIT> H ex. F S H                          **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  9. You may play to completion or enter 'q'    **\n";
-    std::cout << "**     to quit the game if you get stuck          **\n";
+    std::cout << "**  10. You may play to completion or enter 'q'   **\n";
+    std::cout << "**      to quit the game if you get stuck         **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  10. Enter '?' to reprint move options         **\n";
+    std::cout << "**  11. Enter '?' to reprint move options         **\n";
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
     std::cout << "**                     Enjoy!                     **\n";
@@ -253,12 +254,12 @@ void User::move(UserInput input) {
 //move card to foundation
 void User::move_foundation(const char dest_suit, const char move_from,
                            const std::pair<size_t, size_t> move_coords) {
-    //TODO: Handle Dest errors in main
-    //TODO: error check for proper suit, proper coordinates if passed (move is T)
-    //TODO: error check for moves based on dest and source
-    //TODO: error check: invalid move
-        //if source is tableau, check if coordinates
     
+    size_t dest = dest_suit == 'H' ? 0 :
+                  dest_suit == 'S' ? 1 :
+                  dest_suit == 'D' ? 2 :
+                  dest_suit == 'C' ? 3 : std::numeric_limits<size_t>::infinity();
+    //move to foundations[dest].push()
     //move from tableau
     if (move_from == 'T') {
         //error check for proper coordinates (within bounds)
@@ -288,6 +289,7 @@ void User::move_tableau(const std::pair<size_t, size_t> dest_coords,
                         const char move_from, const std::pair<size_t, size_t> move_coords) {
     //TODO: error checks
     
+    //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
     
     //check move card is opposite suit for dest card
     //check move card is prev rank for dest card
