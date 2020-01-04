@@ -261,19 +261,35 @@ void User::move(UserInput input) {
 }
 
 void User::move_to_foundation_from_hand(const size_t dest) {
-    //if no card drawn or deck is empty
+    //if no card drawn or deck is empty, throw error
     if (!drawn || deck.empty()) {
-        //throw foundation move error
         throw FoundationError("Foundation, no card to move from Hand");
     }
     //check card match suit and next rank for foundation
     //add card to foundation
     //remove card from deck
     //print success
+    std::cout << "\nSuccessful Move: Card added to Foundation from Hand\n";
 }
 
 void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<size_t, size_t> source) {
-    
+    //if card not in tableau, throw error
+    if (!tableau[source.first][source.second].is_in_tableau()) {
+        throw FoundationError("Foundation, card not in Tableau");
+    }
+    //if card not faced up, throw error
+    if (!tableau[source.first][source.second].is_turned()) {
+        throw FoundationError("Foundation, card not faced up");
+    }
+    //if card has cards below it in col (card one row down is in tableau), throw error
+    if (tableau[source.first + 1][source.second].is_in_tableau()) {
+        throw FoundationError("Foundation, can only move one card at a time");
+    }
+    //check card match suit and next rank for foundation
+    //add card to foundation
+    //remove card from tableau
+    //print success
+    std::cout << "\nSuccessful Move: Card added to Foundation from Tableau\n";
 }
 
 void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {

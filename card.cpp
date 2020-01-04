@@ -183,7 +183,7 @@ std::ostream& operator<<(std::ostream& out, const Rank& r) {
 std::ostream& operator<<(std::ostream& out, const Card& c) {
     if (!c.is_turned()) out << "**";
     else {
-        //TODO: dont know why need to do this
+        //TODO: dont know why need to do this and can't directly print getter results
         Suit s = c.get_suit();
         Rank r = c.get_rank();
         out << s << r;

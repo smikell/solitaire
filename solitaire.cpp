@@ -9,6 +9,7 @@
 #include "user.h"
 
 //TODO: ADD RMEs TO ALL FUNCTIONS AS DOCUMENTATION
+//TODO: in successful move messages, add which card specifically moved (and from where) and to where it moved
 
 //char read_command_line(int argc, char* argv[]);
 
@@ -180,4 +181,4 @@ char read_command_line(int argc, char* argv[]) {
 */
 
 
-//secret easter egg function for rare scenario where a King ends up at bottom of 7th column and stack cards all the way down to bottom: maybe hide a gift card or something
+//secret easter egg function for rare scenario where a King ends up at bottom of 7th column and stack cards all the way down to bottom: maybe hide a gift card or something (must pull from something online or something, like an API call because otherwise would be revealed in the code)
