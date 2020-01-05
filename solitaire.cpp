@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
             }
             else if (toupper(in.to) == 'T') {
                 //read following coords and error check
-                std::cin >> in.to_row >> in.to_col;
+                std::cin >> in.to_col >> in.to_row;
                 check_cin();
                 game.check_coords(in.to_row, in.to_col);
             }
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
             }
             else if (toupper(in.from) == 'T') {
                 //read following coords and error check
-                std::cin >> in.from_row >> in.from_col;
+                std::cin >> in.from_col >> in.from_row;
                 check_cin();
                 game.check_coords(in.from_row, in.from_col);
             }

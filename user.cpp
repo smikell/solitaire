@@ -34,7 +34,7 @@ void User::game_starting() {
     std::cout << "**     program waits for finish before executing  **\n";
     std::cout << "**  6. Letters may be lower or upper case         **\n";
     std::cout << "**  7. Input line after valid move is ignored     **\n";
-    std::cout << "**  8. SUIT {HSDC}, 0 < ROW <= 20, 0 < COL <= 7   **\n";
+    std::cout << "**  8. SUIT {HSDC}, 0 < COL <= 7, 0 < ROW <= 20    **\n";
     std::cout << "**  9. Below are acceptable moves and formats     **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Input Format: <TO> <FROM>                     **\n";
@@ -43,22 +43,23 @@ void User::game_starting() {
     std::cout << "**  D                                             **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Move to Tableau from Tableau:                 **\n";
-    std::cout << "**  T <ROW> <COL> T <ROW> <COL> ex. T 1 1 T 2 2   **\n";
+    std::cout << "**  T <COL> <ROW> T <COL> <ROW> ex. T 1 1 T 2 2   **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Move to Tableau from Hand:                    **\n";
-    std::cout << "**  T <ROW> <COL> H ex. T 1 1 H                   **\n";
+    std::cout << "**  T <COL> <ROW> H ex. T 1 1 H                   **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Move to Tableau from Foundation:              **\n";
-    std::cout << "**  T <ROW> <COL> F <SUIT> ex. T 1 1 F S          **\n";
+    std::cout << "**  T <COL> <ROW> F <SUIT> ex. T 1 1 F S          **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  Note: The <TO> Tableau <ROW> and <COL> should **\n";
+    std::cout << "**  Note: The <TO> Tableau <COL> and <ROW> should **\n";
     std::cout << "**  be treated as the card you want to place the  **\n";
     std::cout << "**  <FROM> card on top of                         **\n";
     std::cout << "**  Example: T 1 1 T 2 2 attempts to place card   **\n";
-    std::cout << "**  at [2][2] on top of the card at [1][1]        **\n";
+    std::cout << "**  at Column 2 Row 2 on top of the card at       **\n";
+    std::cout << "**  Column 1 Row 1                                **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Move to Foundation from Tableau:              **\n";
-    std::cout << "**  F <SUIT> T <ROW> <COL> ex. F S T 1 1          **\n";
+    std::cout << "**  F <SUIT> T <COL> <ROW> ex. F S T 1 1          **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Move to Foundation from Hand:                 **\n";
     std::cout << "**  F <SUIT> H ex. F S H                          **\n";
@@ -457,12 +458,30 @@ void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
     if (!tableau[dest.first][dest.second].prev_rank(tableau[source.first][source.second])) {
         throw TableauError("Tableau, card from Tableau is not previous rank");
     }
-    //add card(s) to tableau
-    //if king added to empty, then start loop at dest coords, otherwise start one row down
-    //remove card(s) from tableau
-    //remove from source coords down until reach card that is not in tableau
-    //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
-    
+    //variables to be used in loops for add/remove
+    size_t dest_row = tableau[dest.first][dest.second].get_rank() == Rank::Empty ? dest.first : dest.first + 1;
+    size_t dest_col = dest.second;
+    size_t source_row = source.first;
+    size_t source_col = source.second;
+    //while source card is in tableau
+    while (tableau[source_row][source_col].is_in_tableau()) {
+        //add source to dest
+        tableau[dest_row++][dest_col] = tableau[source_row][source_col];
+        //remove from source
+        tableau[source_row++][source_col] = Card();
+        //cards remain faced up and in tableau
+    }
+    //handle previous card in source col
+    if (source.first == 0) {
+        //if card from row 0 removed, replace with empty placeholder
+        tableau[source.first][source.second] = Card(Suit::Empty, Rank::Empty);
+    }
+    else {
+        //turn previous card in column if not turned already
+        if (!tableau[source.first - 1][source.second].is_turned()) {
+            tableau[source.first - 1][source.second].turn();
+        }
+    }
     //print success
     std::cout << "\nSuccessful Move: Card added to Tableau from Tableau\n";
 }
