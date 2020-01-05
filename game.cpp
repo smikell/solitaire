@@ -17,7 +17,7 @@ void Game::shuffle() {
     //load foundation placeholders
     size_t suit = 0;
     for (std::stack<Card>& pile : foundations) {
-        pile.push(Card(suits[suit++], Rank::None, true));
+        pile.push(Card(suits[suit++], Rank::None));
     }
     //load deck
     size_t pos = 0;
@@ -127,6 +127,7 @@ unsigned Game::get_score() const {
 //update user score
 void Game::update_score() {
     //TODO: score adjustment according to timing
+    //TODO: update complete booleans based on foundation.top == king
 }
 
 //return number of moves

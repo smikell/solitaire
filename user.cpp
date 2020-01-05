@@ -317,13 +317,21 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
     if (!foundations[dest].top().next_rank(tableau[source.first][source.second])) {
         throw FoundationError("Foundation, card from Tableau is not next rank");
     }
-    //add card to foundation
+    //remove card tableau in status, add card to foundation
+    tableau[source.first][source.second].change_tableau_status();
     foundations[dest].push(tableau[source.first][source.second]);
     //remove card from tableau
-    tableau[source.first][source.second] = Card();
-    //turn previous card in column if not turned already
-    if (!tableau[source.first - 1][source.second].is_turned()) {
-        tableau[source.first - 1][source.second].turn();
+    if (source.first == 0) {
+        //if card from row 0 removed, replace with empty placeholder
+        tableau[source.first][source.second] = Card(Suit::Empty, Rank::Empty);
+    }
+    else {
+        //otherwise, replace card with default
+        tableau[source.first][source.second] = Card();
+        //turn previous card in column if not turned already
+        if (!tableau[source.first - 1][source.second].is_turned()) {
+            tableau[source.first - 1][source.second].turn();
+        }
     }
     //print success
     std::cout << "\nSuccessful Move: Card added to Foundation from Tableau\n";
@@ -355,8 +363,16 @@ void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
         throw TableauError("Tableau, card from Hand is not previous rank");
     }
     //add card to tableau, already turned since shown in hand
-    tableau[dest.first + 1][dest.second] = deck.front();
-    tableau[dest.first + 1][dest.second].change_tableau_status();
+    if (deck.front().get_rank() == Rank::King) {
+        //if adding king to tableau, replace at coordinates since empty is there
+        tableau[dest.first][dest.second] = deck.front();
+        tableau[dest.first][dest.second].change_tableau_status();
+    }
+    else {
+        //otherwise, adding other card to row below destination
+        tableau[dest.first + 1][dest.second] = deck.front();
+        tableau[dest.first + 1][dest.second].change_tableau_status();
+    }
     //remove card from deck
     deck.pop_front();
     //now no card is drawn
@@ -391,8 +407,16 @@ void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest,
         throw TableauError("Tableau, card from Foundation is not previous rank");
     }
     //add card to tableau, already turned since shown in foundation
-    tableau[dest.first + 1][dest.second] = foundations[source].top();
-    tableau[dest.first + 1][dest.second].change_tableau_status();
+    if (foundations[source].top().get_rank() == Rank::King) {
+        //if adding king to tableau, replace at coordinates since empty is there
+        tableau[dest.first][dest.second] = foundations[source].top();
+        tableau[dest.first][dest.second].change_tableau_status();
+    }
+    else {
+        //otherwise, adding other card to row below destination
+        tableau[dest.first + 1][dest.second] = foundations[source].top();
+        tableau[dest.first + 1][dest.second].change_tableau_status();
+    }
     //remove card from foundation
     foundations[source].pop();
     //print success
@@ -434,7 +458,9 @@ void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
         throw TableauError("Tableau, card from Tableau is not previous rank");
     }
     //add card(s) to tableau
+    //if king added to empty, then start loop at dest coords, otherwise start one row down
     //remove card(s) from tableau
+    //remove from source coords down until reach card that is not in tableau
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
     
     //print success

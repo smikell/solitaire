@@ -12,11 +12,16 @@
 Card::Card() : suit{Suit::None}, rank{Rank::None} {}
 
 //custom constructor for suit and rank
-Card::Card(Suit s, Rank r) : suit{s}, rank{r} {}
-
-//custom constructor for foundation placeholders
-Card::Card(Suit s, Rank r, bool placeholder) : Card(s, r) {
-    up = placeholder;
+Card::Card(Suit s, Rank r) : suit{s}, rank{r} {
+    //if foundation placeholder, turn card
+    if (suit != Suit::None && rank == Rank::None) {
+        turn();
+    }
+    //if empty placeholder for tableau, turn card and mark in
+    if (suit == Suit::Empty && rank == Rank::Empty) {
+        turn();
+        change_tableau_status();
+    }
 }
 
 //return suit for output

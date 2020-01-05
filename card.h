@@ -21,8 +21,6 @@ public:
     Card();
     //custom constructor for suit and rank
     Card(Suit s, Rank r);
-    //custom constructor for foundation placeholders
-    Card(Suit s, Rank r, bool placeholder);
     //return suit for output
     Suit get_suit() const;
     //return rank for output
