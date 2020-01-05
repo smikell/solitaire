@@ -268,7 +268,14 @@ void User::move_to_foundation_from_hand(const size_t dest) {
     if (!drawn || deck.empty()) {
         throw FoundationError("Foundation, no card to move from Hand");
     }
-    //check card match suit and next rank for foundation
+    //if added card from deck doesn't match foundation suit, throw error
+    if (!foundations[dest].top().match_suit(deck.front())) {
+        throw FoundationError("Foundation, card from Hand does not match suit");
+    }
+    //if added card from deck isn't next rank for foundation, throw error
+    if (!foundations[dest].top().next_rank(deck.front())) {
+        throw FoundationError("Foundation, card from Hand is not next rank");
+    }
     //add card to foundation
     //remove card from deck
     //print success
@@ -286,9 +293,17 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
     }
     //if card has cards below it in col (card one row down is in tableau), throw error
     if (tableau[source.first + 1][source.second].is_in_tableau()) {
-        throw FoundationError("Foundation, can't move card from Tableau if cards below");
+        throw FoundationError("Foundation, cannot move card from Tableau if cards below");
     }
     //check card match suit and next rank for foundation
+    //if added card from tableau doesn't match foundation suit, throw error
+    if (!foundations[dest].top().match_suit(tableau[source.first][source.second])) {
+        throw FoundationError("Foundation, card from Tableau does not match suit");
+    }
+    //if added card from tableau isn't next rank for foundation, throw error
+    if (!foundations[dest].top().next_rank(tableau[source.first][source.second])) {
+        throw FoundationError("Foundation, card from Tableau is not next rank");
+    }
     //add card to foundation
     //remove card from tableau
     //print success
@@ -308,7 +323,10 @@ void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
     if (tableau[dest.first + 1][dest.second].is_in_tableau()) {
         throw TableauError("Tableau, destination card not last in row");
     }
-    //if !drawn || deck empty, throw error
+    //if no card drawn or deck is empty, throw error
+    if (!drawn || deck.empty()) {
+        throw TableauError("Tableau, no card to move from Hand");
+    }
     //check opposite suit and next rank for dest card from hand
     //add card to tableau
     //remove card from deck
@@ -330,6 +348,9 @@ void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest,
         throw TableauError("Tableau, destination card not last in row");
     }
     //if source foundation is rank none, then placeholder, throw error
+    if (foundations[source].top().get_rank() == Rank::None) {
+        throw TableauError("Tableau, no card to move from Foundation");
+    }
     //check opposite suit and next rank for dest card from hand
     //add card to tableau
     //remove card from foundation
@@ -352,7 +373,17 @@ void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
         throw TableauError("Tableau, destination card not last in row");
     }
     //if source card not in tableau, throw error
+    if (!tableau[source.first][source.second].is_in_tableau()) {
+        throw TableauError("Tableau, source card not in Tableau");
+    }
     //if source card not faced up, throw error
+    if (!tableau[source.first][source.second].is_turned()) {
+        throw TableauError("Tableau, source card not faced up in Tableau");
+    }
+    //if destination and source are same, throw error
+    if (dest == source) {
+        throw TableauError("Tableau, destination and source cards are same");
+    }
     //check opposite suit and next rank for dest card from tableau
     //add card to tableau
     //remove card(s) from tableau
