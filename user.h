@@ -99,7 +99,7 @@ public:
     //check suit input validity
     void check_suit(const char input) const;
     //check coords input validity
-    void check_coords(const size_t row, const size_t col) const;
+    void check_coords(size_t& row, size_t& col) const;
     //draw card from hand
     void draw();
     //checks move for validity and calls appropriate move

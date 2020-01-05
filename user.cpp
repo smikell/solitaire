@@ -34,7 +34,7 @@ void User::game_starting() {
     std::cout << "**     program waits for finish before executing  **\n";
     std::cout << "**  6. Letters may be lower or upper case         **\n";
     std::cout << "**  7. Input line after valid move is ignored     **\n";
-    std::cout << "**  8. SUIT valid char, ROW <= 19, COL <= 7       **\n";
+    std::cout << "**  8. SUIT {HSDC}, 0 < ROW <= 20, 0 < COL <= 7   **\n";
     std::cout << "**  9. Below are acceptable moves and formats     **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Input Format: <TO> <FROM>                     **\n";
@@ -183,14 +183,17 @@ void User::check_suit(char input) const {
 }
 
 //check coords input validity
-void User::check_coords(const size_t row, const size_t col) const {
-    if (row > MAX_ROWS || col > MAX_COLS) {
+void User::check_coords(size_t& row, size_t& col) const {
+    if (row > MAX_ROWS || col > MAX_COLS || row == 0 || col == 0) {
         //eat remaining line
         std::string junk;
         getline(std::cin, junk);
         //throw error
         throw InvalidInput("Invalid Input, invalid coordinates (ROW or COL)");
     }
+    //otherwise, if coords are valid, convert each to 0-based index
+    row -= 1;
+    col -= 1;
 }
 
 //draw card from hand
@@ -279,11 +282,11 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
     }
     //if card not faced up, throw error
     if (!tableau[source.first][source.second].is_turned()) {
-        throw FoundationError("Foundation, card not faced up");
+        throw FoundationError("Foundation, card not faced up in Tableau");
     }
     //if card has cards below it in col (card one row down is in tableau), throw error
     if (tableau[source.first + 1][source.second].is_in_tableau()) {
-        throw FoundationError("Foundation, can only move one card at a time");
+        throw FoundationError("Foundation, can't move card from Tableau if cards below");
     }
     //check card match suit and next rank for foundation
     //add card to foundation
@@ -293,15 +296,68 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
 }
 
 void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
-    
+    //if destination card not in tableau, throw error
+    if (!tableau[dest.first][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not in Tableau");
+    }
+    //if destination card not faced up, throw error
+    if (!tableau[dest.first][dest.second].is_turned()) {
+        throw TableauError("Tableau, destination card not faced up in Tableau");
+    }
+    //if destination card not last in row (card one row down is in tableau), throw error
+    if (tableau[dest.first + 1][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not last in row");
+    }
+    //if !drawn || deck empty, throw error
+    //check opposite suit and next rank for dest card from hand
+    //add card to tableau
+    //remove card from deck
+    //print success
+    std::cout << "\nSuccessful Move: Card added to Tableau from Hand\n";
 }
 
 void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest, const size_t source) {
-    
+    //if destination card not in tableau, throw error
+    if (!tableau[dest.first][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not in Tableau");
+    }
+    //if destination card not faced up, throw error
+    if (!tableau[dest.first][dest.second].is_turned()) {
+        throw TableauError("Tableau, destination card not faced up in Tableau");
+    }
+    //if destination card not last in row (card one row down is in tableau), throw error
+    if (tableau[dest.first + 1][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not last in row");
+    }
+    //if source foundation is rank none, then placeholder, throw error
+    //check opposite suit and next rank for dest card from hand
+    //add card to tableau
+    //remove card from foundation
+    //print success
+    std::cout << "\nSuccessful Move: Card added to Tableau from Foundation\n";
 }
 
 void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
                                         const std::pair<size_t, size_t> source) {
-    
+    //if destination card not in tableau, throw error
+    if (!tableau[dest.first][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not in Tableau");
+    }
+    //if destination card not faced up, throw error
+    if (!tableau[dest.first][dest.second].is_turned()) {
+        throw TableauError("Tableau, destination card not faced up in Tableau");
+    }
+    //if destination card not last in row (card one row down is in tableau), throw error
+    if (tableau[dest.first + 1][dest.second].is_in_tableau()) {
+        throw TableauError("Tableau, destination card not last in row");
+    }
+    //if source card not in tableau, throw error
+    //if source card not faced up, throw error
+    //check opposite suit and next rank for dest card from tableau
+    //add card to tableau
+    //remove card(s) from tableau
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
+    
+    //print success
+    std::cout << "\nSuccessful Move: Card added to Tableau from Tableau\n";
 }

@@ -55,7 +55,7 @@ private:
     const size_t NUM_RANKS = 13;
     const size_t NUM_CARDS = 52;
     const size_t MAX_COLS = 7;
-    const size_t MAX_ROWS = 19;
+    const size_t MAX_ROWS = 20;
     //unordered set of suit characters to check against input
     const std::unordered_set<char> SUIT_CHECK = {'H', 'S', 'D', 'C'};
     //game containers for cards
