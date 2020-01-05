@@ -63,10 +63,20 @@ void User::game_starting() {
     std::cout << "**  Move to Foundation from Hand:                 **\n";
     std::cout << "**  F <SUIT> H ex. F S H                          **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  10. You may play to completion or enter 'q'   **\n";
+    std::cout << "**  10. Enter '?' to reprint move options         **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  11. Score multiplier information:             **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  Each card added to foundation is 10 pts       **\n";
+    std::cout << "**  Each card removed from foundation is -15 pts  **\n";
+    std::cout << "**  Move and Time multiplers are x1.5             **\n";
+    std::cout << "**  Every 20 moves and 90 seconds, respective     **\n";
+    std::cout << "**      multiplier decreases by 0.1 until x1      **\n";
+    std::cout << "**                                                **\n";
+    std::cout << "**  12. You may play to completion or enter 'q'   **\n";
     std::cout << "**      to quit the game if you get stuck         **\n";
     std::cout << "**                                                **\n";
-    std::cout << "**  11. Enter '?' to reprint move options         **\n";
+    std::cout << "**  13. Game will automatically end after 1 hour  **\n";
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
     std::cout << "**                     Enjoy!                     **\n";
@@ -344,8 +354,13 @@ void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
     if (!tableau[dest.first][dest.second].prev_rank(deck.front())) {
         throw TableauError("Tableau, card from Hand is not previous rank");
     }
-    //add card to tableau
+    //add card to tableau, already turned since shown in hand
+    tableau[dest.first + 1][dest.second] = deck.front();
+    tableau[dest.first + 1][dest.second].change_tableau_status();
     //remove card from deck
+    deck.pop_front();
+    //now no card is drawn
+    drawn = false;
     //print success
     std::cout << "\nSuccessful Move: Card added to Tableau from Hand\n";
 }
