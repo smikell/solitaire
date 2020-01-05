@@ -69,8 +69,8 @@ void User::game_starting() {
     std::cout << "**                                                **\n";
     std::cout << "**  Each card added to foundation is 10 pts       **\n";
     std::cout << "**  Each card removed from foundation is -15 pts  **\n";
-    std::cout << "**  Move and Time multiplers are x1.5             **\n";
-    std::cout << "**  Every 20 moves and 90 seconds, respective     **\n";
+    std::cout << "**  Move and Time independent multiplers are x1.5 **\n";
+    std::cout << "**  Every 25 moves and 90 seconds, respective     **\n";
     std::cout << "**      multiplier decreases by 0.1 until x1      **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  12. You may play to completion or enter 'q'   **\n";
@@ -390,8 +390,11 @@ void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest,
     if (!tableau[dest.first][dest.second].prev_rank(foundations[source].top())) {
         throw TableauError("Tableau, card from Foundation is not previous rank");
     }
-    //add card to tableau
+    //add card to tableau, already turned since shown in foundation
+    tableau[dest.first + 1][dest.second] = foundations[source].top();
+    tableau[dest.first + 1][dest.second].change_tableau_status();
     //remove card from foundation
+    foundations[source].pop();
     //print success
     std::cout << "\nSuccessful Move: Card added to Tableau from Foundation\n";
 }
@@ -430,7 +433,7 @@ void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
     if (!tableau[dest.first][dest.second].prev_rank(tableau[source.first][source.second])) {
         throw TableauError("Tableau, card from Tableau is not previous rank");
     }
-    //add card to tableau
+    //add card(s) to tableau
     //remove card(s) from tableau
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)
     
