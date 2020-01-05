@@ -66,6 +66,8 @@ void Game::deal() {
 //print hand, foundations, and tableau to screen
 void Game::print_game() const {
     std::cout << "\n";
+    //TODO: ADD TIME
+    //TODO: ADD SCORE
     //print hand
     if (deck.empty()) {
         std::cout << "E         ";
@@ -106,7 +108,6 @@ void Game::print_game() const {
         std::cout << " " << ++row_num;
         std::cout << "\n";
     }
-    //TODO: ADD TIME FUNCTION
 }
 
 //check if game ended

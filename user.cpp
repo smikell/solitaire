@@ -268,11 +268,11 @@ void User::move_to_foundation_from_hand(const size_t dest) {
     if (!drawn || deck.empty()) {
         throw FoundationError("Foundation, no card to move from Hand");
     }
-    //if added card from deck doesn't match foundation suit, throw error
+    //if card from deck does not match foundation suit, throw error
     if (!foundations[dest].top().match_suit(deck.front())) {
         throw FoundationError("Foundation, card from Hand does not match suit");
     }
-    //if added card from deck isn't next rank for foundation, throw error
+    //if card from deck is not next rank for foundation, throw error
     if (!foundations[dest].top().next_rank(deck.front())) {
         throw FoundationError("Foundation, card from Hand is not next rank");
     }
@@ -295,12 +295,11 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
     if (tableau[source.first + 1][source.second].is_in_tableau()) {
         throw FoundationError("Foundation, cannot move card from Tableau if cards below");
     }
-    //check card match suit and next rank for foundation
-    //if added card from tableau doesn't match foundation suit, throw error
+    //if card from tableau does not match foundation suit, throw error
     if (!foundations[dest].top().match_suit(tableau[source.first][source.second])) {
         throw FoundationError("Foundation, card from Tableau does not match suit");
     }
-    //if added card from tableau isn't next rank for foundation, throw error
+    //if card from tableau is not next rank for foundation, throw error
     if (!foundations[dest].top().next_rank(tableau[source.first][source.second])) {
         throw FoundationError("Foundation, card from Tableau is not next rank");
     }
@@ -327,7 +326,14 @@ void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
     if (!drawn || deck.empty()) {
         throw TableauError("Tableau, no card to move from Hand");
     }
-    //check opposite suit and next rank for dest card from hand
+    //if card from deck is not opposite suit as destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].opposite_suit(deck.front())) {
+        throw TableauError("Tableau, card from Hand is not opposite suit color");
+    }
+    //if card from deck is not prev rank from destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].prev_rank(deck.front())) {
+        throw TableauError("Tableau, card from Hand is not previous rank");
+    }
     //add card to tableau
     //remove card from deck
     //print success
@@ -351,7 +357,14 @@ void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest,
     if (foundations[source].top().get_rank() == Rank::None) {
         throw TableauError("Tableau, no card to move from Foundation");
     }
-    //check opposite suit and next rank for dest card from hand
+    //if card from foundation is not opposite suit as destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].opposite_suit(foundations[source].top())) {
+        throw TableauError("Tableau, card from Foundation is not opposite suit color");
+    }
+    //if card from foundation is not prev rank from destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].prev_rank(foundations[source].top())) {
+        throw TableauError("Tableau, card from Foundation is not previous rank");
+    }
     //add card to tableau
     //remove card from foundation
     //print success
@@ -384,7 +397,14 @@ void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
     if (dest == source) {
         throw TableauError("Tableau, destination and source cards are same");
     }
-    //check opposite suit and next rank for dest card from tableau
+    //if card from tableau is not opposite suit as destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].opposite_suit(tableau[source.first][source.second])) {
+        throw TableauError("Tableau, card from Tableau is not opposite suit color");
+    }
+    //if card from tableau is not prev rank from destination in tableau, throw error
+    if (!tableau[dest.first][dest.second].prev_rank(tableau[source.first][source.second])) {
+        throw TableauError("Tableau, card from Tableau is not previous rank");
+    }
     //add card to tableau
     //remove card(s) from tableau
     //when move multiple cards, loop through from that row to bottom (if statement to check if up, then move below other)

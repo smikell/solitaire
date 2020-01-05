@@ -9,7 +9,7 @@
 #include "card.h"
 
 //default constructor
-Card::Card() : suit{Suit::Spade}, rank{Rank::Ace} {}
+Card::Card() : suit{Suit::None}, rank{Rank::None} {}
 
 //custom constructor for suit and rank
 Card::Card(Suit s, Rank r) : suit{s}, rank{r} {}
