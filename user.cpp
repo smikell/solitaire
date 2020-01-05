@@ -277,7 +277,11 @@ void User::move_to_foundation_from_hand(const size_t dest) {
         throw FoundationError("Foundation, card from Hand is not next rank");
     }
     //add card to foundation
+    foundations[dest].push(deck.front());
     //remove card from deck
+    deck.pop_front();
+    //now no card is drawn
+    drawn = false;
     //print success
     std::cout << "\nSuccessful Move: Card added to Foundation from Hand\n";
 }
@@ -304,7 +308,13 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
         throw FoundationError("Foundation, card from Tableau is not next rank");
     }
     //add card to foundation
+    foundations[dest].push(tableau[source.first][source.second]);
     //remove card from tableau
+    tableau[source.first][source.second] = Card();
+    //turn previous card in column if not turned already
+    if (!tableau[source.first - 1][source.second].is_turned()) {
+        tableau[source.first - 1][source.second].turn();
+    }
     //print success
     std::cout << "\nSuccessful Move: Card added to Foundation from Tableau\n";
 }

@@ -34,31 +34,25 @@ void Game::shuffle() {
 
 //deal deck into tableau
 void Game::deal() {
-    //deck index
-    size_t pos = 0;
     //for each column
     for (size_t c = 0; c < MAX_COLS; ++c) {
         //add proper number of cards
         for (size_t r = 0; r < c; ++r) {
             //add card
-            tableau[r][c] = deck[pos];
+            tableau[r][c] = deck.front();
             //remove from deck
-            deck.erase(deck.begin() + pos);
+            deck.pop_front();
             //mark card as in tableau
             tableau[r][c].change_tableau_status();
-            //next position
-            ++pos;
         }
         //last card added
-        tableau[c][c] = deck[pos];
+        tableau[c][c] = deck.front();
         //remove from deck
-        deck.erase(deck.begin() + pos);
+        deck.pop_front();
         //turn last card
         tableau[c][c].turn();
         //mark card as in tableau
         tableau[c][c].change_tableau_status();
-        //next position
-        ++pos;
     }
     print_game();
 }

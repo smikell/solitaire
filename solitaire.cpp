@@ -69,7 +69,6 @@ int main(int argc, char* argv[]) {
                 getline(std::cin, junk);
                 throw InvalidInput("Invalid Input, no matching <TO> move");
             }
-            std::cout << "to success\n";
             //read <FROM> char
             std::cin >> in.from;
             check_cin();
@@ -94,7 +93,6 @@ int main(int argc, char* argv[]) {
                 getline(std::cin, junk);
                 throw InvalidInput("Invalid Input, no matching <FROM> move");
             }
-            std::cout << "from success\n";
             //eat remaining line
             std::string junk;
             getline(std::cin, junk);
