@@ -119,6 +119,17 @@ bool Game::is_complete() const {
     return heart && spade && diamond && club;
 }
 
+//return current time
+long long Game::get_current_time() const {
+    //TODO: return current time - start time
+    return start_time;
+}
+
+//return number of moves
+unsigned Game::get_num_moves() const {
+    return num_moves;
+}
+
 //return user score
 unsigned Game::get_score() const {
     return score;
@@ -128,9 +139,5 @@ unsigned Game::get_score() const {
 void Game::update_score() {
     //TODO: score adjustment according to timing
     //TODO: update complete booleans based on foundation.top == king
-}
-
-//return number of moves
-unsigned Game::get_num_moves() const {
-    return num_moves;
+    //TODO: update game_over if is_complete
 }

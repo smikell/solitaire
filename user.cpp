@@ -88,6 +88,8 @@ void User::game_starting() {
     getline(std::cin, name);
     
     std::cout << "Welcome " << get_name() << "! game starting...\n";
+    
+    //TODO: SAVE STARTING TIME
 }
 
 //help message for move format

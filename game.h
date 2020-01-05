@@ -34,12 +34,14 @@ public:
     void deal();
     //print hand, foundations, and tableau to screen
     void print_game() const;
-    //return number of moves
-    unsigned get_num_moves() const;
     //check if game ended
     bool is_game_over() const;
     //return completion status
     bool is_complete() const;
+    //return number of moves
+    unsigned get_num_moves() const;
+    //return current time
+    long long get_current_time() const;
     //return user score
     unsigned get_score() const;
     //update user score
@@ -68,6 +70,8 @@ private:
     bool game_over = false;
     //statuses for each suit foundation completion
     bool heart, spade, diamond, club = false;
+    //track start time to compare for output time
+    long long start_time = 0;
     //track score as game progresses
     unsigned score = 0;
     //number of moves in game
