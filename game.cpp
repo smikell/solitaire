@@ -155,7 +155,7 @@ void Game::update_score(bool add) {
     //adjust score
     if (!add) {
         //if removed card, decrease score
-        score -= REMOVE_SCORE;
+        score -= static_cast<unsigned>(REMOVE_SCORE);
     }
     else {
         //otherwise, added card, so increase score based on multipliers
@@ -170,7 +170,7 @@ void Game::update_score(bool add) {
         double time_multiplier = std::max(1.0, TIME_MULTIPLIER - time_decrease);
         unsigned add_from_time = static_cast<unsigned>(ceil(static_cast<double>(ADD_SCORE) * (time_multiplier)));
         //add to score
-        score += add_from_move + add_from_time - ADD_SCORE;
+        score += add_from_move + add_from_time - static_cast<unsigned>(ADD_SCORE);
     }
     //update complete booleans
     heart = foundations[0].top().get_rank() == Rank::King;

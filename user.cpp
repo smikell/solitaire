@@ -194,7 +194,7 @@ void User::game_ending() const {
 
 //check suit input validity
 void User::check_suit(char input) const {
-    if (SUIT_CHECK.find(toupper(input)) == SUIT_CHECK.end()) {
+    if (SUIT_CHECK.find(static_cast<char>(toupper(input))) == SUIT_CHECK.end()) {
         //eat remaining line
         std::string junk;
         getline(std::cin, junk);
