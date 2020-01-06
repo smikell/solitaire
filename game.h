@@ -63,7 +63,7 @@ private:
     const std::unordered_set<char> SUIT_CHECK = {'H', 'S', 'D', 'C'};
     //score multipliers
     const int ADD_SCORE = 10;
-    const int REMOVE_SCORE = 15;
+    const int REMOVE_SCORE = 20;
     const double TIME_MULTIPLIER = 1.5;
     const double MOVE_MULTIPLIER = 1.5;
     const double TIME_DECREASE = 0.1;

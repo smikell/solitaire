@@ -62,27 +62,27 @@ void Game::print_game() const {
     std::cout << "\n";
     std::pair<time_t, time_t> time = get_current_time();
     std::cout << "Time: " << time.first << "m " << time.second << "s ";
-    std::cout << " ";
+    std::cout << "      ";
     std::cout << "Moves: " << get_num_moves();
     std::cout << "\n";
     //print hand
     if (deck.empty()) {
-        std::cout << "E         ";
+        std::cout << "E             ";
     }
     else if (drawn) {
         if (deck.size() == 1) std::cout << "E  ";
         else std::cout << "** ";
-        std::cout << deck.front() << "    ";
+        std::cout << deck.front() << "        ";
     }
     else {
-        std::cout << deck.front() << "      ";
+        std::cout << deck.front() << "          ";
     }
     //print foundations
     for (const std::stack<Card>& f : foundations) {
-        std::cout << f.top() << " ";
+        std::cout << f.top() << "  ";
     }
     std::cout << "\n\n";
-    std::cout << "1  2  3  4  5  6  7  \n";
+    std::cout << "1   2   3   4   5   6   7   \n";
     //print tableau
     unsigned row_num = 0;
     for (std::vector<Card> row : tableau) {
@@ -90,10 +90,16 @@ void Game::print_game() const {
         unsigned blanks = 0;
         for (const Card& c : row) {
             if (c.is_in_tableau()) {
-                std::cout << c << " ";
+                std::cout << c;
+                if (c.get_rank() == Rank::Ten && c.is_turned()) {
+                    std::cout << " ";
+                }
+                else {
+                    std::cout << "  ";
+                }
             }
             else {
-                std::cout << "   ";
+                std::cout << "    ";
                 ++blanks;
             }
         }

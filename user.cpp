@@ -69,7 +69,7 @@ void User::game_starting() {
     std::cout << "**  11. Score multiplier information:             **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Each card added to foundation is 10 pts       **\n";
-    std::cout << "**  Each card removed from foundation is -15 pts  **\n";
+    std::cout << "**  Each card removed from foundation is -20 pts  **\n";
     std::cout << "**  Move and Time independent multiplers are x1.5 **\n";
     std::cout << "**  Every 52 moves and 3 minutes, respective      **\n";
     std::cout << "**      multiplier decreases by 0.1 until x1      **\n";
@@ -220,7 +220,7 @@ void User::check_coords(size_t& row, size_t& col) const {
 //draw card from hand
 void User::draw() {
     //if no more cards to draw, throw error
-    if (deck.empty()) {
+    if (deck.empty() || (drawn && deck.size() == 1)) {
         throw DrawError("Draw Error, no more cards to draw");
     }
     //if card already drawn
