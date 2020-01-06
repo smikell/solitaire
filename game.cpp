@@ -12,8 +12,8 @@
 void Game::shuffle() {
     //create iterable containers for suits and ranks
     std::vector<Suit> suits {Suit::Heart, Suit::Spade, Suit::Diamond, Suit::Club};
-    std::vector<Rank> ranks { Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
-        Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
+    std::vector<Rank> ranks { Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
+        Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King };
     //load foundation placeholders
     size_t suit = 0;
     for (std::stack<Card>& pile : foundations) {
@@ -60,9 +60,9 @@ void Game::deal() {
 //print hand, foundations, and tableau to screen
 void Game::print_game() const {
     std::cout << "\n";
-    //TODO: ADD TIME get_time()
-    std::cout << "Time: ";
-    std::cout << "       ";
+    std::pair<time_t, time_t> time = get_current_time();
+    std::cout << "Time: " << time.first << "m " << time.second << "s ";
+    std::cout << " ";
     std::cout << "Moves: " << get_num_moves();
     std::cout << "\n";
     //print hand
@@ -120,9 +120,13 @@ bool Game::is_complete() const {
 }
 
 //return current time
-long long Game::get_current_time() const {
-    //TODO: return current time - start time
-    return start_time;
+std::pair<time_t, time_t> Game::get_current_time() const {
+    //get time difference
+    time_t game_time = time(NULL) - start_time;
+    //convert to minutes and seconds
+    time_t minutes = game_time / 60;
+    time_t seconds = game_time - (minutes * 60);
+    return std::make_pair(minutes, seconds);
 }
 
 //return number of moves
@@ -136,8 +140,32 @@ unsigned Game::get_score() const {
 }
 
 //update user score
-void Game::update_score() {
-    //TODO: score adjustment according to timing
-    //TODO: update complete booleans based on foundation.top == king
-    //TODO: update game_over if is_complete
+void Game::update_score(bool add) {
+    //adjust score
+    if (!add) {
+        //if removed card, decrease score
+        score -= REMOVE_SCORE;
+    }
+    else {
+        //otherwise, added card, so increase score based on multipliers
+        //score multiplier increase
+        double move_decrease = MOVE_DECREASE * (get_num_moves() / MOVE_UPDATE);
+        double move_multiplier = std::max(1.0, MOVE_MULTIPLIER - move_decrease);
+        unsigned add_from_move = static_cast<unsigned>(static_cast<double>(ADD_SCORE) * (move_multiplier));
+        //time multiplier increase
+        std::pair<time_t, time_t> time = get_current_time();
+        time_t total_seconds = (time.first * 60) + time.second;
+        double time_decrease = TIME_DECREASE * (total_seconds / TIME_UPDATE);
+        double time_multiplier = std::max(1.0, TIME_MULTIPLIER - time_decrease);
+        unsigned add_from_time = static_cast<unsigned>(ceil(static_cast<double>(ADD_SCORE) * (time_multiplier)));
+        //add to score
+        score += add_from_move + add_from_time - ADD_SCORE;
+    }
+    //update complete booleans
+    heart = foundations[0].top().get_rank() == Rank::King;
+    spade = foundations[1].top().get_rank() == Rank::King;
+    diamond = foundations[2].top().get_rank() == Rank::King;
+    club = foundations[3].top().get_rank() == Rank::King;
+    //update game_over
+    if (is_complete()) game_over = true;
 }

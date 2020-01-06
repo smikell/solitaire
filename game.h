@@ -16,6 +16,7 @@
 #include <random>
 #include <chrono>
 #include <unordered_set>
+#include <ctime>
 
 //TODO: can a container of base classes hold derived class objects? or vice versa?
 
@@ -41,11 +42,11 @@ public:
     //return number of moves
     unsigned get_num_moves() const;
     //return current time
-    long long get_current_time() const;
+    std::pair<time_t, time_t> get_current_time() const;
     //return user score
     unsigned get_score() const;
     //update user score
-    void update_score();
+    void update_score(bool add);
     //starting banner and introduction
     virtual void game_starting() = 0;
     //ending banner and message
@@ -60,6 +61,16 @@ private:
     const size_t MAX_ROWS = 20;
     //unordered set of suit characters to check against input
     const std::unordered_set<char> SUIT_CHECK = {'H', 'S', 'D', 'C'};
+    //score multipliers
+    const int ADD_SCORE = 10;
+    const int REMOVE_SCORE = 15;
+    const double TIME_MULTIPLIER = 1.5;
+    const double MOVE_MULTIPLIER = 1.5;
+    const double TIME_DECREASE = 0.1;
+    const double MOVE_DECREASE = 0.1;
+    const unsigned TIME_UPDATE = 180;
+    const unsigned MOVE_UPDATE = 52;
+    //const time_t TIME_LIMIT = 3600;
     //game containers for cards
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;
@@ -71,11 +82,11 @@ private:
     //statuses for each suit foundation completion
     bool heart, spade, diamond, club = false;
     //track start time to compare for output time
-    long long start_time = 0;
-    //track score as game progresses
-    unsigned score = 0;
+    time_t start_time = 0;
     //number of moves in game
     unsigned num_moves = 0;
+    //track score as game progresses
+    unsigned score = 0;
 };
 
 #endif /* game_h */

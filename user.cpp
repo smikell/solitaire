@@ -34,7 +34,7 @@ void User::game_starting() {
     std::cout << "**     program waits for finish before executing  **\n";
     std::cout << "**  6. Letters may be lower or upper case         **\n";
     std::cout << "**  7. Input line after valid move is ignored     **\n";
-    std::cout << "**  8. SUIT {HSDC}, 0 < COL <= 7, 0 < ROW <= 20    **\n";
+    std::cout << "**  8. SUIT {HSDC}, 0 < COL <= 7, 0 < ROW <= 20   **\n";
     std::cout << "**  9. Below are acceptable moves and formats     **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  Input Format: <TO> <FROM>                     **\n";
@@ -71,7 +71,7 @@ void User::game_starting() {
     std::cout << "**  Each card added to foundation is 10 pts       **\n";
     std::cout << "**  Each card removed from foundation is -15 pts  **\n";
     std::cout << "**  Move and Time independent multiplers are x1.5 **\n";
-    std::cout << "**  Every 25 moves and 90 seconds, respective     **\n";
+    std::cout << "**  Every 52 moves and 3 minutes, respective      **\n";
     std::cout << "**      multiplier decreases by 0.1 until x1      **\n";
     std::cout << "**                                                **\n";
     std::cout << "**  12. You may play to completion or enter 'q'   **\n";
@@ -89,7 +89,8 @@ void User::game_starting() {
     
     std::cout << "Welcome " << get_name() << "! game starting...\n";
     
-    //TODO: SAVE STARTING TIME
+    //save starting time
+    start_time = time(NULL);
 }
 
 //help message for move format
@@ -164,6 +165,13 @@ void User::end_print(const char type) const {
     add_spaces(static_cast<unsigned>(std::to_string(num).length()), remaining);
     std::cout << "**\n";
 }
+void User::end_print(const std::pair<time_t, time_t> time) const {
+    unsigned remaining = 36;
+    std::cout << "**  Time: " << time.first << "m " << time.second << "s ";
+    add_spaces(static_cast<unsigned>(std::to_string(time.first).length() +
+                                     std::to_string(time.second).length()), remaining);
+    std::cout << "**\n";
+}
 
 //ending banner and message
 void User::game_ending() const {
@@ -177,7 +185,7 @@ void User::game_ending() const {
     std::cout << "**  Game Ended with...                            **\n";
     end_print('S');
     end_print('M');
-    std::cout << "**  Time: ?                                       **\n";
+    end_print(get_current_time());
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
     std::cout << "**          github.com/smikell/solitaire          **\n";
@@ -252,7 +260,8 @@ void User::move(UserInput input) {
         else {
             throw FoundationError("Invalid Move, cannot move from one foundation to another");
         }
-        update_score();
+        //card added to foundation, score increases
+        update_score(true);
     }
     else if (toupper(input.to) == 'T') {
         //coordinates to add card to in tableau
@@ -266,6 +275,8 @@ void User::move(UserInput input) {
                                  toupper(input.from_suit) == 'D' ? 2 :
                                  toupper(input.from_suit) == 'C' ? 3 : std::numeric_limits<size_t>::infinity();
             move_to_tableau_from_foundation(dest_coords, source_suit);
+            //card removed from foundation, score decreases
+            update_score(false);
         }
         else if (toupper(input.from) == 'T') {
             move_to_tableau_from_tableau(dest_coords, std::make_pair(input.from_row, input.from_col));

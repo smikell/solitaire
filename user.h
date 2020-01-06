@@ -94,6 +94,7 @@ public:
     //print appropriate message and spaces
     void end_print(const std::string output) const;
     void end_print(const char type) const;
+    void end_print(const std::pair<time_t, time_t> time) const;
     //ending banner and message
     void game_ending() const override;
     //check suit input validity
@@ -104,6 +105,7 @@ public:
     void draw();
     //checks move for validity and calls appropriate move
     void move(UserInput input);
+    //move options
     void move_to_foundation_from_hand(const size_t dest);
     void move_to_foundation_from_tableau(const size_t dest, const std::pair<size_t, size_t> source);
     void move_to_tableau_from_hand(const std::pair<size_t, size_t> dest);

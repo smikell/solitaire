@@ -86,7 +86,6 @@ bool Card::opposite_suit(const Card added) const {
 
 //check if added card is subsequent rank
 bool Card::next_rank(const Card added) const {
-    //TODO: EDGE CASES: adding to a king, adding the king itself, adding ace to none
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
         Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
@@ -101,7 +100,6 @@ bool Card::next_rank(const Card added) const {
 
 //check if added card is previous rank
 bool Card::prev_rank(const Card added) const {
-    //TODO: EDGE CASES: adding to a king, adding an ace to a two, adding to an ace
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
         Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
