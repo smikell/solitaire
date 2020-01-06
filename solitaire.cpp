@@ -100,15 +100,15 @@ int main(int argc, char* argv[]) {
             game.move(in);
         }
         catch (const InputError& input) {
-            std::cout << input.error() << "\n";
+            std::cerr << input.error() << "\n";
             continue;
         }
         catch (const MoveError& move) {
-            std::cout << move.error() << "\n";
+            std::cerr << move.error() << "\n";
             continue;
         }
         catch (...) {
-            std::cout << "Caught unknown error\n";
+            std::cerr << "Caught unknown error\n";
             continue;
         }
     }

@@ -70,7 +70,7 @@ private:
     const double MOVE_DECREASE = 0.1;
     const unsigned TIME_UPDATE = 180;
     const unsigned MOVE_UPDATE = 52;
-    //const time_t TIME_LIMIT = 3600;
+    const time_t TIME_LIMIT = 3600;
     //game containers for cards
     std::deque<Card> deck;
     std::vector<std::vector<Card>> tableau;

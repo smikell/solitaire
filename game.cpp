@@ -129,6 +129,11 @@ bool Game::is_complete() const {
 std::pair<time_t, time_t> Game::get_current_time() const {
     //get time difference
     time_t game_time = time(NULL) - start_time;
+    //exit program if game has run for longer than 1 hour (3600 seconds)
+    if (game_time >= TIME_LIMIT) {
+        std::cerr << "\nGame has been running for over 1 hour, terminating program\n";
+        exit(1);
+    }
     //convert to minutes and seconds
     time_t minutes = game_time / 60;
     time_t seconds = game_time - (minutes * 60);
