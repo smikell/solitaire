@@ -80,7 +80,7 @@ void User::game_starting() {
     std::cout << "**  13. Game will automatically end after 1 hour  **\n";
     std::cout << "**                                                **\n";
     std::cout << "****************************************************\n";
-    std::cout << "**                     Enjoy!                     **\n";
+    std::cout << "**                Patience is Key!                **\n";
     std::cout << "****************************************************\n\n";
     
     //retrieve name from user
