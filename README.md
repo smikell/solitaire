@@ -1,6 +1,17 @@
 # Solitaire for the Bored Programmer
 by Sam Mikell | [19 December 2019, Present]
-My first project beyond the scope of school projects with specifications and guidance
+
+My first project beyond the scope of school projects with specifications and guidance.
+
+ Solitaire is a game I first discovered on an iPod Nano when I was nine years old, and the game has stuck with me for years since.
+ As such, this project is focused on implementing Solitaire to be playable at the command line of Terminal or other Unix command line interfaces.
+ Below describes how to play my version and other details about this project.
+
+## Quick start
+```console
+$ make solitaire.exe
+$ ./solitaire.exe
+```
 
 Be wary of longer run times due to time it takes to type each command and it starts to get tedious after a while
 
@@ -11,9 +22,3 @@ One day I may implement a secondary version with Jokers and may try to implement
 ## The Game (Add desc/instructions + info + goals for future)
 
 Another name for this game is Patience, and this implementation of the game certainly requires it.
-
-## Quick start
-```console
-$ make solitaire.exe
-$ ./solitaire.exe
-```
