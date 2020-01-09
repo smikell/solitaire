@@ -19,7 +19,7 @@ void check_cin();
 int main(int argc, char* argv[]) {
     xcode_redirect(argc, argv);
     std::ios_base::sync_with_stdio(false);
-    
+
     //start game, shuffle, and deal
     User game;
     game.shuffle();
@@ -133,19 +133,19 @@ void check_cin() {
 /*
 char read_command_line(int argc, char* argv[]) {
     char mode = '\0';
-    
+
     int opt_index = 0, opt = 0;
-    
+
     //this implementation will handle invalid arguments instead
     opterr = false;
-    
+
     //list of options to find in the command line
     struct option long_opts[] = {
         { "help", no_argument, nullptr, 'h' },
         { "user", no_argument, nullptr, 'u' },
         { nullptr, 0, nullptr, '\0' }
     };
-    
+
     //parse arguments from command line
     while((opt = getopt_long(argc, argv, "hu", long_opts, &opt_index)) != -1) {
         switch(opt) {
@@ -162,7 +162,7 @@ char read_command_line(int argc, char* argv[]) {
                 break;
         } //switch
     } //while
-    
+
     return mode;
 } //read_command_line
 */
