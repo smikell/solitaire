@@ -7,11 +7,6 @@ Solitaire is a game I first discovered on an iPod Nano when I was nine years old
 As such, this project is focused on implementing Solitaire to be playable at the command line of Terminal or other Unix command line interfaces. Below describes how to play my version and other details about this project.
 
 ## Quick start
-1. Download repository file by clicking the green button in the top right corner
-        1a. You can skip this step if you just clone the repository as shown below
-
-2. Redirect to the folder in Terminal or whatever Shell you are using
-        2a. Going the clone route, 
 
 ```console
 $ make solitaire.exe
@@ -29,3 +24,10 @@ One day I may implement a secondary version with Jokers and may try to implement
 ## The Game (Add desc/instructions + info + goals for future)
 
 Another name for this game is Patience, and this implementation of the game certainly requires it.
+
+
+1. Download repository file by clicking the green button in the top right corner
+1a. You can skip this step if you just clone the repository as shown below
+
+2. Redirect to the folder in Terminal or whatever Shell you are using
+2a. Going the clone route, 

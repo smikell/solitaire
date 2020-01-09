@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
             continue;
         }
     }
-    //game.game_ending();
+    game.game_ending();
     
     return 0;
 }
