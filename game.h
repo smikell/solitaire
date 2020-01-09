@@ -22,33 +22,46 @@
 
 class Game {
 public:
-    //ctor for Game, resizes members appropriately
-    Game() {
-        deck.resize(NUM_CARDS);
-        tableau.resize(MAX_ROWS, std::vector<Card>(MAX_COLS));
-        foundations.resize(NUM_SUITS);
-    }
+    //MODIFIES: deck, tableau, and foundations containers
+    //EFFECTS: Default Ctor, modified containers are resized according to const members
+    Game();
     
-    //shuffle deck prior to starting game
+    //MODIFIES: deck container
+    //EFFECTS: loads deck with each unique Card then randomly shuffles using a random seed
+    //         from the time of program start and a Mersenne Twister object
     void shuffle();
-    //deal deck into tableau
+    
+    //MODIFIES: deck and tableau containers
+    //EFFECTS: Cards from deck are removed after inserting into tableau column according
+    //         to Solitaire starting structure, then game printed to user
     void deal();
-    //print hand, foundations, and tableau to screen
+    
+    //EFFECTS: print game layout for user
     void print_game() const;
-    //check if game ended
+    
+    //EFFECTS: returns true if game is over
     bool is_game_over() const;
-    //return completion status
+    
+    //EFFECTS: returns true if all suit foundations are filled
     bool is_complete() const;
-    //return number of moves
+    
+    //EFFECTS: returns number of moves
     unsigned get_num_moves() const;
-    //return current time
+    
+    //EFFECTS: returns pair of minutes and seconds passed in Game, throws exception if over 1 hour
     std::pair<time_t, time_t> get_current_time() const;
-    //return user score
+    
+    //EFFECTS: returns game score
     unsigned get_score() const;
-    //update user score
+    
+    //MODIFIES: score, suit completion, and game over status
+    //EFFECTS: update score based on whether card added or removed and utilizing dynamic
+    //         moves and timing system for adjustments, update suit completions and game over
     void update_score(bool add);
+    
     //starting banner and introduction
     virtual void game_starting() = 0;
+    
     //ending banner and message
     virtual void game_ending() const = 0;
     

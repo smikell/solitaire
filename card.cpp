@@ -8,10 +8,13 @@
 
 #include "card.h"
 
-//default constructor
+//MODIFIES: suit and rank of constructed Card
+//EFFECTS: Default Ctor for Card object
 Card::Card() : suit{Suit::None}, rank{Rank::None} {}
 
-//custom constructor for suit and rank
+//MODIFIED: suit and rank of constructed Card
+//EFFECTS: Custom Ctor for Card object, calls default, turns and/or sets tableau status
+//         depending on input suit and rank (foundation or empty placeholder)
 Card::Card(Suit s, Rank r) : suit{s}, rank{r} {
     //if foundation placeholder, turn card
     if (suit != Suit::None && rank == Rank::None) {
@@ -24,68 +27,70 @@ Card::Card(Suit s, Rank r) : suit{s}, rank{r} {
     }
 }
 
-//return suit for output
+//EFFECTS: returns Card object's suit
 Suit Card::get_suit() const {
     return suit;
 }
 
-//return rank for output
+//EFFECTS: returns Card object's rank
 Rank Card::get_rank() const {
     return rank;
 }
 
-//check if turned for output
+//EFFECTS: returns true if Card is face up
 bool Card::is_turned() const {
     return up;
 }
 
-//check if in tableau for output
+//EFFECTS: returns true if Card is in tableau
 bool Card::is_in_tableau() const {
     return in;
 }
 
-//check if red suit for moves
+//EFFECTS: returns true if Card is a red suit
 bool Card::is_red() const {
     //OR Empty is meant for case where king is added to empty tableau position
     return get_suit() == Suit::Heart || get_suit() == Suit::Diamond || get_suit() == Suit::Empty;
 }
 
-//check if black suit for moves
+//EFFECTS: returns true if Card is a black suit
 bool Card::is_black() const {
     //OR Empty is meant for case where king is added to empty tableau position
     return get_suit() == Suit::Spade || get_suit() == Suit::Club || get_suit() == Suit::Empty;
 }
 
-//flip card
+//MODIFIES: up member of Card
+//EFFECTS: changes faced up status to opposite
 void Card::turn() {
     if (is_turned()) up = false;
     else up = true;
 }
 
-//change when add or remove from tableau
+//MODIFIES: in member of Card
+//EFFECTS: changes in tableau status to opposite
 void Card::change_tableau_status() {
     if (is_in_tableau()) in = false;
     else in = true;
 }
 
-//check if added card is matching suit
-bool Card::match_suit(const Card added) const {
+//EFFECTS: returns true if added Card's suit matches current Card's suit
+bool Card::match_suit(const Card& added) const {
     if (added.get_suit() == get_suit()) {
         return true;
     }
     return false;
 }
 
-//check if added card is opposite suit
-bool Card::opposite_suit(const Card added) const {
+//EFFECTS: returns true if added Card's suit is opposite of current Card's suit
+bool Card::opposite_suit(const Card& added) const {
     if ((added.is_red() && is_black()) || (added.is_black() && is_red())) {
         return true;
     }
     return false;
 }
 
-//check if added card is subsequent rank
-bool Card::next_rank(const Card added) const {
+//EFFECTS: returns true if added Card's rank is succeeding rank of current Card's rank
+bool Card::next_rank(const Card& added) const {
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
         Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
@@ -98,8 +103,8 @@ bool Card::next_rank(const Card added) const {
     return false;
 }
 
-//check if added card is previous rank
-bool Card::prev_rank(const Card added) const {
+//EFFECTS: returns true if added Card's rank is preceding rank of current Card's rank
+bool Card::prev_rank(const Card& added) const {
     //create iterable container of ranks in order
     std::vector<Rank> ranks { Rank::None, Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six,
         Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Empty };
@@ -112,7 +117,7 @@ bool Card::prev_rank(const Card added) const {
     return false;
 }
 
-//overload for Suit enum to print to screen
+//EFFECTS: prints associated char for passed Suit
 std::ostream& operator<<(std::ostream& out, const Suit& s) {
     if (s == Suit::Heart) {
         out << 'H';
@@ -135,7 +140,7 @@ std::ostream& operator<<(std::ostream& out, const Suit& s) {
     return out;
 }
 
-//overload for Rank enum to print to screen
+//EFFECTS: prints associated char for passed Rank
 std::ostream& operator<<(std::ostream& out, const Rank& r) {
     if (r == Rank::Ace) {
         out << 'A';
@@ -182,7 +187,7 @@ std::ostream& operator<<(std::ostream& out, const Rank& r) {
     return out;
 }
 
-//overload for Card to print to screen
+//EFFECTS: prints Card suit and rank chars if Card is face up or ** if not face up
 std::ostream& operator<<(std::ostream& out, const Card& c) {
     if (!c.is_turned()) out << "**";
     else {

@@ -8,12 +8,14 @@
 
 #include "user.h"
 
-//default constructor
+//MODIFIES: Game base class
+//EFFECTS: calls Game Default Ctor, prints starting game message
 User::User() : Game() {
     game_starting();
 }
 
-//starting banner and introduction
+//MODIFIES: user name, starting time
+//EFFECTS: prints starting message, prompts/receives user name, saves starting time
 void User::game_starting() {
     std::cout << "****************************************************\n";
     std::cout << "**       Solitaire for the Bored Programmer       **\n";
@@ -93,7 +95,7 @@ void User::game_starting() {
     start_time = time(NULL);
 }
 
-//help message for move format
+//EFFECTS: prints help message for valid moves, reprints game layout
 void User::help_message() {
     std::cout << "\n";
     std::cout << "****************************************************\n";
@@ -133,17 +135,19 @@ void User::help_message() {
     print_game();
 }
 
-//return user name
+//EFFECTS: returns user entered name
 std::string User::get_name() const {
     return name;
 }
 
-//print appropriate message and spaces
+//EFFECTS: adds spaces to output depending on variable output lengthss
 static void add_spaces(const unsigned length, const unsigned remaining) {
     for (unsigned i = 0; i < remaining - length; ++i) {
         std::cout << " ";
     }
 }
+
+//EFFECTS: prints ending message for user depending on if complete or quit
 void User::end_print(const std::string output) const {
     unsigned remaining;
     if (is_complete()) {
@@ -157,6 +161,8 @@ void User::end_print(const std::string output) const {
     add_spaces(static_cast<unsigned>(output.length()), remaining);
     std::cout << "**\n";
 }
+
+//EFFECTS: prints score or move stats for user
 void User::end_print(const char type) const {
     unsigned remaining = 39;
     unsigned num = type == 'S' ? get_score() : get_num_moves();
@@ -165,6 +171,8 @@ void User::end_print(const char type) const {
     add_spaces(static_cast<unsigned>(std::to_string(num).length()), remaining);
     std::cout << "**\n";
 }
+
+//EFFECTS: prints final time for user
 void User::end_print(const std::pair<time_t, time_t> time) const {
     unsigned remaining = 36;
     std::cout << "**  Time: " << time.first << "m " << time.second << "s ";
@@ -173,7 +181,7 @@ void User::end_print(const std::pair<time_t, time_t> time) const {
     std::cout << "**\n";
 }
 
-//ending banner and message
+//EFFECTS: prints ending message and calls necessary print helpers
 void User::game_ending() const {
     std::cout << "\n";
     std::cout << "****************************************************\n";
@@ -192,7 +200,7 @@ void User::game_ending() const {
     std::cout << "****************************************************\n";
 }
 
-//check suit input validity
+//EFFECTS: checks user input for valid suit or throws exception
 void User::check_suit(char input) const {
     if (SUIT_CHECK.find(static_cast<char>(toupper(input))) == SUIT_CHECK.end()) {
         //eat remaining line
@@ -203,7 +211,7 @@ void User::check_suit(char input) const {
     }
 }
 
-//check coords input validity
+//EFFECTS: checks user input for valid coordinates or throws exception
 void User::check_coords(size_t& row, size_t& col) const {
     if (row > MAX_ROWS || col > MAX_COLS || row == 0 || col == 0) {
         //eat remaining line
@@ -217,7 +225,9 @@ void User::check_coords(size_t& row, size_t& col) const {
     col -= 1;
 }
 
-//draw card from hand
+//MODIFIES: deck, drawn status
+//EFFECTS: pop and push front if already drawn, turns card at front of deck, reprint game
+//         for user, throw exception if drawn errors
 void User::draw() {
     //if no more cards to draw, throw error
     if (deck.empty() || (drawn && deck.size() == 1)) {
@@ -241,7 +251,10 @@ void User::draw() {
     print_game();
 }
 
-//checks move for validity and calls appropriate move
+//REQUIRES: user input at this point is valid syntactically
+//MODIFIES: game containers, score, num_moves
+//EFFECTS: call matching user move function, throw error if necessary, update score if
+//         move involves foundation, incremement num_moves, print game to user
 void User::move(UserInput input) {
     //all input valid at this point since checked in main
     //branches will determine which valid move combination is called
@@ -282,11 +295,14 @@ void User::move(UserInput input) {
             move_to_tableau_from_tableau(dest_coords, std::make_pair(input.from_row, input.from_col));
         }
     }
-    //game updates
     ++num_moves;
     print_game();
 }
 
+//REQUIRES: dest is a valid suit
+//MODIFIES: deck, foundations, drawn status
+//EFFECTS: moves front card to proper foundation, removes card from deck
+//         or throws relevant error beforehand
 void User::move_to_foundation_from_hand(const size_t dest) {
     //if no card drawn or deck is empty, throw error
     if (!drawn || deck.empty()) {
@@ -310,6 +326,10 @@ void User::move_to_foundation_from_hand(const size_t dest) {
     std::cout << "\nSuccessful Move: Card added to Foundation from Hand\n";
 }
 
+//REQUIRES: dest is valid suit, source is valid row,col coordinates in tableau
+//MODIFIES: tableau, moved card, foundations
+//EFFECTS: removes card from tableau, adds to proper foundation, adjusts column by either
+//         leaving empty placeholder or turning previous card, or throws relevant error beforehand
 void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<size_t, size_t> source) {
     //if card not in tableau, throw error
     if (!tableau[source.first][source.second].is_in_tableau()) {
@@ -351,6 +371,10 @@ void User::move_to_foundation_from_tableau(const size_t dest, const std::pair<si
     std::cout << "\nSuccessful Move: Card added to Foundation from Tableau\n";
 }
 
+//REQUIRES: dest is valid row,col coordinates in tableau
+//MODIFIES: deck, moved card, tableau
+//EFFECTS: adds card to appropriate position in column depending on if rank King and
+//         change tableau status to mark in, then remove from deck, or throw relevant error beforehand
 void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
     //if destination card not in tableau, throw error
     if (!tableau[dest.first][dest.second].is_in_tableau()) {
@@ -395,6 +419,10 @@ void User::move_to_tableau_from_hand(const std::pair<size_t, size_t> dest) {
     std::cout << "\nSuccessful Move: Card added to Tableau from Hand\n";
 }
 
+//REQUIRES: dest is valid row,col coordinates in tableau, source is valid suit
+//MODIFIES: foundations, moved card, tableau
+//EFFECTS: adds card to appropriate position in column depending on if rank King and
+//         change tableau status to mark in, then pop from foundation, or throw relevant error beforehand
 void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest, const size_t source) {
     //if destination card not in tableau, throw error
     if (!tableau[dest.first][dest.second].is_in_tableau()) {
@@ -437,6 +465,12 @@ void User::move_to_tableau_from_foundation(const std::pair<size_t, size_t> dest,
     std::cout << "\nSuccessful Move: Card added to Tableau from Foundation\n";
 }
 
+//REQUIRES: dest and source are valid row,col coordinates in tableau
+//MODIFIES: tableau
+//EFFECTS: loop through all cards in source col from source row down to one card below
+//         dest row OR dest row if rank is Empty in dest col, replace with Empty
+//         placeholder if card taken from row 0 otherwise turn card in prev row in col (source)
+//         or throw relevant error
 void User::move_to_tableau_from_tableau(const std::pair<size_t, size_t> dest,
                                         const std::pair<size_t, size_t> source) {
     //if destination card not in tableau, throw error

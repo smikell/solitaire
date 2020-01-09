@@ -17,34 +17,52 @@ enum struct Rank {None, Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Te
 
 class Card {
 public:
-    //default constructor
+    //MODIFIES: suit and rank of constructed Card
+    //EFFECTS: Default Ctor for Card object
     Card();
-    //custom constructor for suit and rank
+    
+    //MODIFIED: suit and rank of constructed Card
+    //EFFECTS: Custom Ctor for Card object, calls default, turns and/or sets tableau status
+    //         depending on input suit and rank (foundation or empty placeholder)
     Card(Suit s, Rank r);
-    //return suit for output
+    
+    //EFFECTS: returns Card object's suit
     Suit get_suit() const;
-    //return rank for output
+    
+    //EFFECTS: returns Card object's rank
     Rank get_rank() const;
-    //check if turned for output
+    
+    //EFFECTS: returns true if Card is face up
     bool is_turned() const;
-    //check if in tableau for output
+    
+    //EFFECTS: returns true if Card is in tableau
     bool is_in_tableau() const;
-    //check if red suit for moves
+    
+    //EFFECTS: returns true if Card is a red suit
     bool is_red() const;
-    //check if black suit for moves
+    
+    //EFFECTS: returns true if Card is a black suit
     bool is_black() const;
-    //flip card
+    
+    //MODIFIES: up member of Card
+    //EFFECTS: changes faced up status to opposite
     void turn();
-    //change when add or remove from tableau
+    
+    //MODIFIES: in member of Card
+    //EFFECTS: changes in tableau status to opposite
     void change_tableau_status();
-    //check if added card is matching suit
-    bool match_suit(const Card added) const;
-    //check if added card is opposite suit
-    bool opposite_suit(const Card added) const;
-    //check if added card is subsequent rank
-    bool next_rank(const Card added) const;
-    //check if added card is previous rank
-    bool prev_rank(const Card added) const;
+    
+    //EFFECTS: returns true if added Card's suit matches current Card's suit
+    bool match_suit(const Card& added) const;
+    
+    //EFFECTS: returns true if added Card's suit is opposite of current Card's suit
+    bool opposite_suit(const Card& added) const;
+    
+    //EFFECTS: returns true if added Card's rank is succeeding rank of current Card's rank
+    bool next_rank(const Card& added) const;
+    
+    //EFFECTS: returns true if added Card's rank is preceding rank of current Card's rank
+    bool prev_rank(const Card& added) const;
 
 private:
     Suit suit;
@@ -55,12 +73,13 @@ private:
     bool in = false;
 };
 
-//overload for Suit enum to print to screen
+//EFFECTS: prints associated char for passed Suit
 std::ostream& operator<<(std::ostream& out, const Suit& s);
-//overload for Rank enum to print to screen
-std::ostream& operator<<(std::ostream& out, const Rank& r);
-//overload for Card to print to screen
-std::ostream& operator<<(std::ostream& out, const Card& c);
 
+//EFFECTS: prints associated char for passed Rank
+std::ostream& operator<<(std::ostream& out, const Rank& r);
+
+//EFFECTS: prints Card suit and rank chars if Card is face up or ** if not face up
+std::ostream& operator<<(std::ostream& out, const Card& c);
 
 #endif /* card_h */

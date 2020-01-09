@@ -8,7 +8,17 @@
 
 #include "game.h"
 
-//shuffle deck prior to starting game
+//MODIFIES: deck, tableau, and foundations containers
+//EFFECTS: Default Ctor, modified containers are resized according to const members
+Game::Game() {
+    deck.resize(NUM_CARDS);
+    tableau.resize(MAX_ROWS, std::vector<Card>(MAX_COLS));
+    foundations.resize(NUM_SUITS);
+}
+
+//MODIFIES: deck container
+//EFFECTS: loads deck with each unique Card then randomly shuffles using a random seed
+//         from the time of program start and a Mersenne Twister object
 void Game::shuffle() {
     //create iterable containers for suits and ranks
     std::vector<Suit> suits {Suit::Heart, Suit::Spade, Suit::Diamond, Suit::Club};
@@ -32,7 +42,9 @@ void Game::shuffle() {
     std::shuffle(deck.begin(), deck.end(), std::mt19937(static_cast<unsigned>(seed)));
 }
 
-//deal deck into tableau
+//MODIFIES: deck and tableau containers
+//EFFECTS: Cards from deck are removed after inserting into tableau column according
+//         to Solitaire starting structure, then game printed to user
 void Game::deal() {
     //for each column
     for (size_t c = 0; c < MAX_COLS; ++c) {
@@ -57,7 +69,7 @@ void Game::deal() {
     print_game();
 }
 
-//print hand, foundations, and tableau to screen
+//EFFECTS: print game layout for user
 void Game::print_game() const {
     std::cout << "\n";
     std::pair<time_t, time_t> time = get_current_time();
@@ -115,17 +127,22 @@ void Game::print_game() const {
     std::cout << "\n";
 }
 
-//check if game ended
+//EFFECTS: returns true if game is over
 bool Game::is_game_over() const {
     return game_over;
 }
 
-//return completion status
+//EFFECTS: returns true if all suit foundations are filled
 bool Game::is_complete() const {
     return heart && spade && diamond && club;
 }
 
-//return current time
+//EFFECTS: returns number of moves
+unsigned Game::get_num_moves() const {
+    return num_moves;
+}
+
+//EFFECTS: returns pair of minutes and seconds passed in Game, throws exception if over 1 hour
 std::pair<time_t, time_t> Game::get_current_time() const {
     //get time difference
     time_t game_time = time(NULL) - start_time;
@@ -140,17 +157,14 @@ std::pair<time_t, time_t> Game::get_current_time() const {
     return std::make_pair(minutes, seconds);
 }
 
-//return number of moves
-unsigned Game::get_num_moves() const {
-    return num_moves;
-}
-
-//return user score
+//EFFECTS: returns game score
 unsigned Game::get_score() const {
     return score;
 }
 
-//update user score
+//MODIFIES: score, suit completion, and game over status
+//EFFECTS: update score based on whether card added or removed and utilizing dynamic
+//         moves and timing system for adjustments, update suit completions and game over
 void Game::update_score(bool add) {
     //adjust score
     if (!add) {
